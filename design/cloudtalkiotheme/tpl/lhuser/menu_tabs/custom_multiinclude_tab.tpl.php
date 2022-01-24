@@ -1,0 +1,3 @@
+<?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_operator')) : ?>
+<li role="presentation" class="nav-item" ><a class="nav-link <?php if ($tab == 'tab_cloudtalkio') : ?>active<?php endif;?>" href="#cloudtalkio" aria-controls="cloudtalkio" role="tab" data-toggle="tab"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','CloudTalk');?></a></li>
+<?php endif;?>
