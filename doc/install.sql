@@ -38,9 +38,21 @@ CREATE TABLE `lhc_cloudtalkio_call` (
                                         `direction` tinyint(1) unsigned NOT NULL DEFAULT 0,
                                         `msg_id` bigint(20) unsigned NOT NULL DEFAULT 0,
                                         `answered_at` bigint(20) unsigned NOT NULL DEFAULT 0,
+                                        `dep_id` bigint(20) unsigned NOT NULL,
                                         PRIMARY KEY (`id`),
                                         KEY `call_id` (`call_id`),
                                         KEY `cloudtalk_user_id` (`cloudtalk_user_id`),
                                         KEY `call_uuid` (`call_uuid`),
-                                        KEY `msg_id` (`msg_id`)
+                                        KEY `msg_id` (`msg_id`),
+                                        KEY `contact_removed` (`contact_removed`),
+                                        KEY `contact_id` (`contact_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `lhc_cloudtalkio_phone_number` (
+    `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    `dep_id` bigint(20) unsigned NOT NULL,
+    `active` tinyint(1) unsigned NOT NULL DEFAULT 1,
+    `phone` varchar(100) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -24,6 +24,7 @@ class erLhcoreClassModelCloudTalkIoCall
             'contact_id' => $this->contact_id,
             'contact_removed' => $this->contact_removed,
             'chat_id' => $this->chat_id,
+            'dep_id' => $this->dep_id,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
@@ -76,6 +77,17 @@ class erLhcoreClassModelCloudTalkIoCall
                 ]]);
                 return $this->cloudtalk_user;
 
+            case 'department':
+                $this->department = null;
+                if ($this->dep_id > 0) {
+                    try {
+                        $this->department = \erLhcoreClassModelDepartament::fetch($this->dep_id,true);
+                    } catch (\Exception $e) {
+
+                    }
+                }
+                return $this->department;
+
             default:
                 ;
                 break;
@@ -99,8 +111,8 @@ class erLhcoreClassModelCloudTalkIoCall
     const DIRECTION_INCOMMING = 1;
 
     public $id = null;
-    public $cloudtalk_user_id = null;
-    public $user_id = null;
+    public $cloudtalk_user_id = 0;
+    public $user_id = 0;
     public $chat_id = null;
     public $date_from = 0;
     public $date_to = 0;
@@ -117,6 +129,7 @@ class erLhcoreClassModelCloudTalkIoCall
     public $talking_time = 0;
     public $answered_at = 0;
     public $msg_id = 0;
+    public $dep_id = 0;
     public $status_outcome = self::STATUS_OUTCOME_MISSED;
 
     public $direction = self::DIRECTION_OUTBOUND;

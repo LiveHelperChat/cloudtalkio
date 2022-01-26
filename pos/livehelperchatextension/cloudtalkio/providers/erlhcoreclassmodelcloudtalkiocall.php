@@ -15,6 +15,7 @@ foreach ([
              'contact_id',
              'call_id',
              'chat_id',
+             'dep_id',
              'status',
              'status_call',
              'contact_removed',

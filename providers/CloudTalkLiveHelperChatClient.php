@@ -25,6 +25,9 @@ class CloudTalkLiveHelperChatClient {
 
     public function perform() {
 
+        $db = \ezcDbInstance::get();
+        $db->reconnect(); // Because it timeouts automatically, this calls to reconnect to database, this is implemented in 2.52v
+
         $chat = \erLhcoreClassModelChat::fetch($this->args['chat_id']);
         $status = false;
 
@@ -64,22 +67,30 @@ class CloudTalkLiveHelperChatClient {
 
     public static function inviteToCall($params) {
 
+        $agent = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::findOne(['filter' => ['user_id' => $params['params_dispatch']['caller_user_id']]]);
+
         $chat = $params['chat'];
 
         $msg = new \erLhcoreClassModelmsg();
         $msg->time = time();
         $msg->chat_id = $chat->id;
 
-        if ($chat->phone != '') {
+        if ($chat->phone != '' && is_object($agent)) {
             $msg->meta_msg = json_encode(['content' => ['extension' => true, 'cloudtalk' => ['status' => 'invite']]]);
             $msg->msg = '';
             $msg->user_id = $params['params_dispatch']['caller_user_id'];
             $msg->name_support = \erLhcoreClassModelUser::fetch($params['params_dispatch']['caller_user_id'])->name_support;
             \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.before_msg_admin_saved', array('msg' => & $msg, 'chat' => & $chat, 'user_id' => $msg->user_id));
         } else {
-            $msg->meta_msg = '';
-            $msg->msg = \htmlspecialchars_decode(\erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Please enter a visitor phone number before a call!'));
-            $msg->user_id = -1;
+            if (!is_object($agent)) {
+                $msg->meta_msg = '';
+                $msg->msg = \htmlspecialchars_decode(\erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','You do not have CloudTalk agent assigned to you!'));
+                $msg->user_id = -1;
+            } else {
+                $msg->meta_msg = '';
+                $msg->msg = \htmlspecialchars_decode(\erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Please enter a visitor phone number before a call!'));
+                $msg->user_id = -1;
+            }
         }
 
         $msg->saveThis();
@@ -91,30 +102,123 @@ class CloudTalkLiveHelperChatClient {
         $chat->updateThis(['update' => ['last_msg_id','last_op_msg_time','has_unread_op_messages']]);
     }
 
-    public static function createContactByChat($chat) {
+    public static function contactByIncommingCall(& $data)
+    {
+
+        // Call exists, we don't need to do anything
+        if (\LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getCount(['filter' => ['call_uuid' => $data['call_uuid']]]) > 0) {
+            return;
+        }
+
+        $phoneNumberInternal = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::findOne(['filter' => ['phone' => $data['internal_number']]]);
+
+        if (!is_object($phoneNumberInternal)) {
+            throw new \Exception('Internal phone number not found!');
+        }
+
+        $chat = new \erLhcoreClassModelChat();
+        $chat->phone = '+'.$data['external_number'];
+        $chat->dep_id = $phoneNumberInternal->dep_id;
+        $chat->nick = $data['external_number'];
+
+        // For extensions to listen for event and prefill details
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('data' => & $data, 'chat' => & $chat));
+
+        // Create a call record
+        $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
+        $call->cloudtalk_user_id = (int)$data['agent_id'];
+        $call->call_uuid = $data['call_uuid'];
+        $call->dep_id = $chat->dep_id;
+        $call->chat_id = 0;
+        $call->phone = $data['external_number'];
+        if ($call->cloudtalk_user_id > 0) {
+            $agent = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::findOne(['filter' => ['cloudtalk_user_id' => $call->cloudtalk_user_id]]);
+            if (is_object($agent)) {
+                $call->user_id = $agent->user_id;
+            }
+        }
+        $call->saveThis();
+
+        // Create a contact
+        $data['contact_id'] = self::createContactByChat($chat);
+        $call->contact_id = $data['contact_id'];
+        $call->updateThis(['update' => ['contact_id']]);
+    }
+
+    public static function callByIncommingCall($data)
+    {
+        $phoneNumberInternal = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::findOne(['filter' => ['phone' => $data['internal_number']]]);
+
+        if (!is_object($phoneNumberInternal)) {
+            throw new \Exception('Internal phone number not found!');
+        }
+
+        $chat = new \erLhcoreClassModelChat();
+        $chat->phone = '+'.$data['external_number'];
+        $chat->dep_id = $phoneNumberInternal->dep_id;
+        $chat->nick = $data['external_number'];
+
+        // For extensions to listen for event and prefill details
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('data' => & $data, 'chat' => & $chat));
+
+        $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
+        if ((int)$data['agent_id'] > 0) {
+            $call->cloudtalk_user_id = (int)$data['agent_id'];
+        }
+        $call->call_uuid = $data['call_uuid'];
+        $call->dep_id = $chat->dep_id;
+        $call->chat_id = 0;
+        $call->phone = $data['external_number'];
+        if ($call->cloudtalk_user_id > 0) {
+            $agent = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::findOne(['filter' => ['cloudtalk_user_id' => $call->cloudtalk_user_id]]);
+            if (is_object($agent)) {
+                $call->user_id = $agent->user_id;
+            }
+        }
+        $call->contact_id = $data['contact_id'];
+        $call->saveThis();
+
+        self::createContactByChat($chat, $call->contact_id);
+    }
+
+    public static function createContactByChat($chat, $contactId = null) {
 
         if (CloudTalkLiveHelperChatClient::TEST_MODE == true) {
             return 100;
         }
 
         $api = \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->getApi();
-        $response = $api->getContacts(['keyword' => $chat->phone]);
 
-        $externalURL = array(
-            array(
-                'name' => \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Last chat') . ' | ' . $chat->id,
-                'url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/chat/single') . '/' . $chat->id,
-            )
-        );
+        if ($contactId === null) {
+            $response = $api->getContacts(['keyword' => $chat->phone]);
+        }
 
-        if (class_exists('\erLhcoreClassExtensionElasticsearch')) {
-            $externalURL[] = array(
-                'name' => \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions'),
-                'url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/email/(val)/' . rawurlencode($chat->email),
+        $externalURL = [];
+
+        if ($chat->id !== null) {
+            $externalURL = array(
+                array(
+                    'name' => \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Last chat') . ' | ' . $chat->id,
+                    'url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/chat/single') . '/' . $chat->id,
+                )
             );
         }
 
-        if (is_object($response) && empty($response->responseData->data)) {
+        if (class_exists('\erLhcoreClassExtensionElasticsearch')) {
+            if ($chat->email != '') {
+                $externalURL[] = array(
+                    'name' => \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions'),
+                    'url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/email/(val)/' . rawurlencode($chat->email),
+                );
+            } else {
+                $externalURL[] = array(
+                    'name' => \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions'),
+                    'url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/phone/(val)/' . rawurlencode($chat->phone),
+                );
+            }
+        }
+
+        if ($contactId === null && is_object($response) && empty($response->responseData->data)) {
 
             $newContactData = array(
                 'name' => $chat->nick,
@@ -146,7 +250,7 @@ class CloudTalkLiveHelperChatClient {
 
         } else {
 
-            if (is_object($response)) {
+            if ($contactId !== null || is_object($response)) {
 
                 $editContactData = array(
                     'name' => $chat->nick,
@@ -155,15 +259,14 @@ class CloudTalkLiveHelperChatClient {
 
                 \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.edit_contact',array('contact' => & $editContactData, 'chat' => & $chat));
 
-                $api->editContact($response->responseData->data[0]->Contact->id,$editContactData);
+                $api->editContact($contactId !== null ? $contactId : $response->responseData->data[0]->Contact->id,$editContactData);
 
-                return $response->responseData->data[0]->Contact->id;
+                return $contactId !== null ? $contactId : $response->responseData->data[0]->Contact->id;
             } else {
                 throw new \Exception('Fetching contact details failed! '.json_encode($response));
             }
         }
     }
-
 
     private static function makeDirectCallAPI($params) {
 
@@ -220,6 +323,7 @@ class CloudTalkLiveHelperChatClient {
                         $call->cloudtalk_user_id = $agent->cloudtalk_user_id;
                         $call->user_id = $params['params_dispatch']['caller_user_id'];
                         $call->chat_id = $params['chat']->id;
+                        $call->dep_id = $params['chat']->dep_id;
                         $call->phone = $phone;
                         $call->saveThis();
 

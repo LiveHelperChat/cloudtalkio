@@ -1,8 +1,14 @@
 <?php if (isset($orderInformation['phone']['enabled']) && $orderInformation['phone']['enabled'] == true && !empty($chat->phone)) : ?>
 
     <div class="col-6 pb-1" ng-non-bindable>
-        <a href="tel:<?php echo $chat->phone?>"><span class="material-icons" >dialpad</span><?php echo $chat->phone?></a>
-        <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_operator')) : ?>
+
+        <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_phone')) : ?>
+            <a href="tel:<?php echo $chat->phone?>"><span class="material-icons" >dialpad</span><?php echo $chat->phone?></a>
+        <?php else : ?>
+            <?php echo $chat->phone?>
+        <?php endif; ?>
+
+        <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_direct')) : ?>
         <br/><span class="text-primary action-image" id="chat-cloudtalk-direct-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will start call directly')?>"><span class="material-icons" >phone</span> <?php echo htmlspecialchars($chat->phone)?></span>
         <?php endif; ?>
     </div>

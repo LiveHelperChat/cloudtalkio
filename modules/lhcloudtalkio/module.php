@@ -29,6 +29,27 @@ $ViewList['assignaction'] = array(
     'functions' => array('use_operator'),
 );
 
+$ViewList['phonenumbers'] = array(
+    'params' => array(),
+    'functions' => array('use_admin'),
+);
+
+$ViewList['newphone'] = array(
+    'params' => array(),
+    'functions' => array('use_admin'),
+);
+
+$ViewList['deletephone'] = array(
+    'params' => array('id'),
+    'uparams' => array('csfr'),
+    'functions' => array('use_admin'),
+);
+
+$ViewList['editphone'] = array(
+    'params' => array('id'),
+    'functions' => array('use_admin'),
+);
+
 $ViewList['assignagent'] = array(
     'params' => array('id'),
     'uparams' => array('user'),
@@ -53,4 +74,6 @@ $ViewList['checkcallstatus'] = array(
 );
 
 $FunctionList['use_admin'] = array('explain' => 'Allow operator to configure CloudTalk');
-$FunctionList['use_operator'] = array('explain' => 'Allow operator to use CloudTalk');
+$FunctionList['use_operator'] = array('explain' => 'Allow operator to use CloudTalk (invite to call)');
+$FunctionList['use_direct'] = array('explain' => 'Allow operator to use CloudTalk (direct call)');
+$FunctionList['use_phone'] = array('explain' => 'Allow operator to use CloudTalk (phone number)');
