@@ -5,19 +5,8 @@ use \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIo
 
 $data = json_decode(file_get_contents('php://input'),true);
 
-// Incomming call
-//$data = json_decode('{"call_uuid":"2f5fb737-0617-4c5c-b276-1852d8d3a9a7","internal_number":37052143590,"direction":"incoming","contact_id":256079987,"agent_id":null,"external_number":37065272274,"action":"call_started","lhc_key":"my_secret_key"}',true);
-//$data = json_decode('{"call_uuid":"2f5fb737-0617-4c5c-b276-1852d8d3a9a7","internal_number":37052143590,"direction":"incoming","contact_id":256079987,"agent_id":130831,"external_number":37065272274,"action":"ringing_on_agent","lhc_key":"my_secret_key"}',true);
-//$data = json_decode('{"call_uuid":"2f5fb737-0617-4c5c-b276-1852d8d3a9a7","internal_number":37052143590,"direction":"incoming","contact_id":256079987,"agent_id":null,"external_number":37065272274,"action":"ended","waiting_time":17,"talking_time":0,"wrapup_time":0,"recording_url":"https:\/\/my.cloudtalk.io\/pub\/r\/MTIzOTE1NDE3\/NGU0N2ZkZjVjOGEzODIzMmM1MDQ2MmVjNjc3MGNhNmZkODMxYjY0YWRkZDY1Y2MzNTVhYmYwMGRjMjFjZDQxZg%3D%3D.wav","call_id":123915417,"lhc_key":"my_secret_key"}',true);
-
-
-// {"call_uuid":"54891dbc-e140-43c4-9ab3-1859a9bb7b87","internal_number":37052143590,"direction":"outgoing","contact_id":256511755,"agent_id":null,"external_number":37065272274,"action":"call_started","lhc_key":"my_secret_key"}
-// {"call_uuid":"54891dbc-e140-43c4-9ab3-1859a9bb7b87","internal_number":37052143590,"direction":"outgoing","contact_id":256511755,"agent_id":130831,"external_number":37065272274,"action":"ended","waiting_time":20,"talking_time":0,"wrapup_time":0,"recording_url":"https:\/\/my.cloudtalk.io\/pub\/r\/MTI0NDQ4OTcz\/MjQwZmU0YTA0NmZlOTBhMTViYjUyYWM5ZDQzMzE5NTgzOTI3Y2E1ZDNkOGRiYmE1ODVhZTBkZWMzNmM5YWQ5Yw%3D%3D.wav","call_id":124448973,"lhc_key":"my_secret_key"}
-
-
-
 // To log always independently on debug mode
-\erLhcoreClassLog::write(json_encode($data));
+// \erLhcoreClassLog::write(json_encode($data));
 
 try {
 
@@ -161,11 +150,9 @@ try {
 
 } catch (\Exception $e) {
 
-    print_r($e);
-    \erLhcoreClassLog::write($e->getMessage().' | '. json_encode($data));
-    /*if (\erConfigClassLhConfig::getInstance()->getSetting( 'site', 'debug_output' ) == true){
+    if (\erConfigClassLhConfig::getInstance()->getSetting( 'site', 'debug_output' ) == true){
         \erLhcoreClassLog::write($e->getMessage().' | '. json_encode($data));
-    }*/
+    }
 }
 
 
