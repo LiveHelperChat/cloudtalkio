@@ -162,14 +162,15 @@ class CloudTalkLiveHelperChatClient {
         $call->email = (string)$chat->email;
         $call->chat_id = 0;
         $call->phone = $data['external_number'];
+        $call->nick = (string)$chat->nick;
         if ($call->cloudtalk_user_id > 0) {
             $agent = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::findOne(['filter' => ['cloudtalk_user_id' => $call->cloudtalk_user_id]]);
             if (is_object($agent)) {
                 $call->user_id = $agent->user_id;
             }
         }
-        if ($chat->chat_varaibles != '') {
-            $call->call_variables = (string)$chat->chat_varaibles;
+        if ($chat->chat_variables != '') {
+            $call->call_variables = (string)$chat->chat_variables;
         }
         $call->saveThis();
 
@@ -210,9 +211,10 @@ class CloudTalkLiveHelperChatClient {
                 $call->user_id = $agent->user_id;
             }
         }
-        if ($chat->chat_varaibles != '') {
-            $call->call_variables = (string)$chat->chat_varaibles;
+        if ($chat->chat_variables != '') {
+            $call->call_variables = (string)$chat->chat_variables;
         }
+        $call->nick = (string)$chat->nick;
         $call->contact_id = $data['contact_id'];
         $call->saveThis();
 
@@ -364,6 +366,7 @@ class CloudTalkLiveHelperChatClient {
                         $call->dep_id = $params['chat']->dep_id;
                         $call->email = (string)$params['chat']->email;
                         $call->phone = $phone;
+                        $call->nick = (string)$params['chat']->nick;
                         $call->saveThis();
 
                         if (isset($params['init']) && $params['init'] == 'visitor') {

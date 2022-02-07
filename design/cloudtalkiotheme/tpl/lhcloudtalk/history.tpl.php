@@ -7,6 +7,7 @@
             <th width="1%"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/cloudtalk','ID');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Department');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor');?></th>
+            <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/extensions/visitor_column_multiinclude.tpl.php')); ?>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Chat agent');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','CloudTalk agent');?></th>
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Live status');?></th>
@@ -29,9 +30,14 @@
                 <td>
                     <a class="mx-1" href="tel:+<?php echo htmlspecialchars($item->phone)?>">+<?php echo htmlspecialchars($item->phone)?></a>
                     <?php if ($item->email != '') : ?>
-                        <a class="mx-1" href="mailto:<?php echo htmlspecialchars($item->email) ?>"><?php echo htmlspecialchars($item->email) ?></a>
+                        <br/><a class="mx-1" href="mailto:<?php echo htmlspecialchars($item->email) ?>"><?php echo htmlspecialchars($item->email) ?></a>
                     <?php endif; ?>
+                    <?php if ($item->nick != '') : ?>
+                        <br/><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Nick');?>: <?php echo htmlspecialchars($item->nick)?></a>
+                    <?php endif; ?>
+
                 </td>
+                <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/extensions/visitor_column_data_multiinclude.tpl.php')); ?>
                 <td>
                     <?php echo htmlspecialchars($item->user)?>
                 </td>

@@ -34,6 +34,14 @@
         "extra": ""
       },
       {
+        "field": "nick",
+        "type": "varchar(100)",
+        "null": "NO",
+        "key": "",
+        "default": "",
+        "extra": ""
+      },
+      {
         "field": "call_variables",
         "type": "text",
         "null": "NO",

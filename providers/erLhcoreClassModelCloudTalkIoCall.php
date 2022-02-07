@@ -43,7 +43,8 @@ class erLhcoreClassModelCloudTalkIoCall
             'msg_id' => $this->msg_id,
             'exclude_autoasign' => $this->exclude_autoasign,
             'email' => $this->email,
-            'call_variables' => $this->call_variables
+            'call_variables' => $this->call_variables,
+            'nick' => $this->nick
         );
     }
 
@@ -155,6 +156,7 @@ class erLhcoreClassModelCloudTalkIoCall
     public $recording_url = '';
     public $email = '';
     public $call_variables = '';
+    public $nick = '';
 }
 
 ?>
