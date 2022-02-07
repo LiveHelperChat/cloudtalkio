@@ -159,6 +159,7 @@ class CloudTalkLiveHelperChatClient {
         $call->cloudtalk_user_id = (int)$data['agent_id'];
         $call->call_uuid = $data['call_uuid'];
         $call->dep_id = $chat->dep_id;
+        $call->email = (string)$chat->email;
         $call->chat_id = 0;
         $call->phone = $data['external_number'];
         if ($call->cloudtalk_user_id > 0) {
@@ -166,6 +167,9 @@ class CloudTalkLiveHelperChatClient {
             if (is_object($agent)) {
                 $call->user_id = $agent->user_id;
             }
+        }
+        if ($chat->chat_varaibles != '') {
+            $call->call_variables = (string)$chat->chat_varaibles;
         }
         $call->saveThis();
 
@@ -197,6 +201,7 @@ class CloudTalkLiveHelperChatClient {
         }
         $call->call_uuid = $data['call_uuid'];
         $call->dep_id = $chat->dep_id;
+        $call->email = (string)$chat->email;
         $call->chat_id = 0;
         $call->phone = $data['external_number'];
         if ($call->cloudtalk_user_id > 0) {
@@ -204,6 +209,9 @@ class CloudTalkLiveHelperChatClient {
             if (is_object($agent)) {
                 $call->user_id = $agent->user_id;
             }
+        }
+        if ($chat->chat_varaibles != '') {
+            $call->call_variables = (string)$chat->chat_varaibles;
         }
         $call->contact_id = $data['contact_id'];
         $call->saveThis();
@@ -354,6 +362,7 @@ class CloudTalkLiveHelperChatClient {
                         $call->user_id = $params['params_dispatch']['caller_user_id'];
                         $call->chat_id = $params['chat']->id;
                         $call->dep_id = $params['chat']->dep_id;
+                        $call->email = (string)$params['chat']->email;
                         $call->phone = $phone;
                         $call->saveThis();
 

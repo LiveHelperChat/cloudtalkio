@@ -41,7 +41,9 @@ class erLhcoreClassModelCloudTalkIoCall
             'status_outcome' => $this->status_outcome,
             'direction' => $this->direction,
             'msg_id' => $this->msg_id,
-            'exclude_autoasign' => $this->exclude_autoasign
+            'exclude_autoasign' => $this->exclude_autoasign,
+            'email' => $this->email,
+            'call_variables' => $this->call_variables
         );
     }
 
@@ -88,6 +90,19 @@ class erLhcoreClassModelCloudTalkIoCall
                     }
                 }
                 return $this->department;
+
+            case 'call_variables_array':
+                if (!empty($this->call_variables)) {
+                    $jsonData = json_decode($this->call_variables,true);
+                    if ($jsonData !== null) {
+                        $this->call_variables_array = $jsonData;
+                    } else {
+                        $this->call_variables_array = $this->call_variables;
+                    }
+                } else {
+                    $this->call_variables_array = array();
+                }
+                return $this->call_variables_array;
 
             default:
                 ;
@@ -138,6 +153,8 @@ class erLhcoreClassModelCloudTalkIoCall
 
     public $call_uuid = '';
     public $recording_url = '';
+    public $email = '';
+    public $call_variables = '';
 }
 
 ?>
