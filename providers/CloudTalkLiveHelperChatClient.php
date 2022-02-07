@@ -375,7 +375,7 @@ class CloudTalkLiveHelperChatClient {
                             $msg = new \erLhcoreClassModelmsg();
                             $msg->user_id = -1;
                             $msg->time = time();
-                            $msg->msg = erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Please accept a call in your CloudTalk application now!');
+                            $msg->msg = \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Please accept a call in your CloudTalk application now!');
                             $msg->meta_msg = json_encode(['content' => ['cloudcall' => ['content' => $call->id]]]);
                             $msg->chat_id = $params['chat']->id;
                             $msg->saveThis();
