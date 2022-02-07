@@ -33,7 +33,7 @@
                         <br/><a class="mx-1" href="mailto:<?php echo htmlspecialchars($item->email) ?>"><?php echo htmlspecialchars($item->email) ?></a>
                     <?php endif; ?>
                     <?php if ($item->nick != '') : ?>
-                        <br/><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Nick');?>: <?php echo htmlspecialchars($item->nick)?></a>
+                        <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/extensions/visitor_nick.tpl.php')); ?>
                     <?php endif; ?>
 
                 </td>
