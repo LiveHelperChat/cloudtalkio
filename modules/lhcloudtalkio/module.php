@@ -61,6 +61,11 @@ $ViewList['monitorcall'] = array(
     'functions' => array('use_operator'),
 );
 
+$ViewList['cancelcall'] = array(
+    'params' => array('id'),
+    'functions' => array('use_operator'),
+);
+
 $ViewList['callback'] = array(
     'params' => array(),
 );

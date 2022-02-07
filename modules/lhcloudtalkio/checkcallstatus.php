@@ -36,7 +36,10 @@ try {
             ($callRecord->status == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_ENDED && $callRecord->call_id == 0)
         )
     ) {
-        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, 'failure', $message);
+        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, [
+            'status' => 'failure',
+            'failure_reason' => erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Time to accept a call has expired!')
+        ], $message);
         echo json_encode(['status' => 'failure','reason' => 'expired']);
     } else {
         echo json_encode(['status' => $metaMessage['content']['cloudtalk']['status']]);
@@ -48,6 +51,19 @@ try {
     http_response_code(400);
     echo json_encode($e->getMessage());
     $db->rollback();
+
+    // Log error
+    erLhcoreClassLog::write($e->getTraceAsString(),
+        ezcLog::SUCCESS_AUDIT,
+        array(
+            'source' => 'cloudtalk',
+            'category' => 'cloudtalk',
+            'line' => __LINE__,
+            'file' => __FILE__,
+            'object_id' => $Params['user_parameters']['chat_id']
+        )
+    );
+    
 }
 
 exit;

@@ -1,6 +1,6 @@
 (function() {
 
-    function chatLoaded(chat_id){
+    function chatLoaded(chat_id) {
         $('#chat-cloudtalk-invitation-btn-'+chat_id+',#chat-cloudtalk-invitation-btn-right-'+chat_id).click(function(event){
             event.preventDefault();
             event.stopPropagation();
@@ -29,9 +29,16 @@
         })
     }
 
+    function cancelCall(msg_id) {
+        $.getJSON(WWW_DIR_JAVASCRIPT + 'cloudtalkio/cancelcall/' + msg_id, function(data) {
+            $('#status-call-'+msg_id).html(data.content);
+        })
+    }
+
     ee.addListener('chatTabInfoReload', chatLoaded);
     ee.addListener('adminChatLoaded', chatLoaded);
     ee.addListener('cloudtalk.monitor_call', callStarted);
+    ee.addListener('cloudtalk.cancel_call', cancelCall);
 
 })();
 

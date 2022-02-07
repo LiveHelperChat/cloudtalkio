@@ -1,9 +1,11 @@
 <?php if ($metaMessage['status'] == 'invite') : // Invite to start a call from visitor ?>
     <button data-no-change="true" data-bot-action="execute-js" data-bot-args='{"msg_id":"<?php echo $msg['id']?>"}' data-bot-extension="cloudtalk-call" onclick="lhinst.executeJS()" type="button" id="cloudtalk-msg-<?php echo $msg['id']?>" class="btn d-block w-100 btn-sm btn-primary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Start a call')?></button>
 <?php elseif ($metaMessage['status'] == 'start_sync') : // Invite to start a call from visitor ?>
-    <div class="bg-primary rounded p-2 text-white fs14"><span class="material-icons">&#xf117;</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Calling to an operator...')?></div>
+    <div class="bg-primary rounded p-2 text-white fs14"><span class="material-icons">&#xf117;</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Calling to an operator...')?></div>
 <?php elseif ($metaMessage['status'] == 'call_started') : // Invite to start a call from visitor ?>
-    <div class="bg-primary rounded p-2 text-white fs14"><span class="material-icons">&#xf117;</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Calling to you...')?></div>
+    <div class="bg-primary rounded p-2 text-white fs14"><span class="material-icons">&#xf117;</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Calling to you...')?></div>
+<?php elseif ($metaMessage['status'] == 'canceled') : // Call was canceled from operator ?>
+    <div class="p-1 fs14 text-danger"><span class="material-icons">&#xf117;</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Call was canceled')?></div>
 <?php elseif ($metaMessage['status'] == 'answered') : // Invite to start a call from visitor ?>
     <div class="bg-success rounded p-2 text-white fs14"><span class="material-icons">&#xf117;</span>
         <?php if (isset($metaMessage['answered_at'])) : ?>

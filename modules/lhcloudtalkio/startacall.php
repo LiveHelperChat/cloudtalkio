@@ -47,7 +47,7 @@ try {
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, 'start_sync', $message);
         echo json_encode(['status' => 'start_sync']);
     } else {
-        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, 'failure', $message);
+        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, ['status' => 'failure', 'failure_reason' => 'API Call has failed!'], $message);
         echo json_encode(['status' => 'failure']);
     }
 
@@ -66,10 +66,20 @@ try {
     http_response_code(400);
     echo json_encode($e->getMessage());
     $db->rollback();
+
+    // Log error
+    \erLhcoreClassLog::write(
+        $e->getTraceAsString(),
+        \ezcLog::SUCCESS_AUDIT,
+        array(
+            'source' => 'cloudtalk',
+            'category' => 'cloudtalk',
+            'line' => __LINE__,
+            'file' => __FILE__,
+            'object_id' => $Params['user_parameters']['chat_id']
+        )
+    );
 }
-
-
-
 
 exit;
 ?>

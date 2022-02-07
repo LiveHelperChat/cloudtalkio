@@ -6,7 +6,6 @@ use \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIo
 $data = json_decode(file_get_contents('php://input'),true);
 
 // To log always independently on debug mode
-// \erLhcoreClassLog::write(json_encode($data));
 
 try {
 
@@ -38,6 +37,11 @@ try {
 
     if (!isset($data['external_number'])) {
         throw new Exception('`external_number` attribute not set!');
+    }
+
+    if ($data['action'] == 'call_started') {
+        // CueCard still in progress because of CloudTalk bugs...
+        //\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::sendCueCard($data);
     }
 
     if (!isset($data['contact_id']) || $data['contact_id'] == null) {
@@ -149,6 +153,20 @@ try {
     }
 
 } catch (\Exception $e) {
+
+    // Log error
+    \erLhcoreClassLog::write(
+        json_encode($data, true).
+        $e->getTraceAsString(),
+        \ezcLog::SUCCESS_AUDIT,
+        array(
+            'source' => 'cloudtalk',
+            'category' => 'cloudtalk',
+            'line' => __LINE__,
+            'file' => __FILE__,
+            'object_id' => $Params['user_parameters']['chat_id']
+        )
+    );
 
     if (\erConfigClassLhConfig::getInstance()->getSetting( 'site', 'debug_output' ) == true){
         \erLhcoreClassLog::write($e->getMessage().' | '. json_encode($data));

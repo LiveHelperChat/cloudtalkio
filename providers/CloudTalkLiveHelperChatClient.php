@@ -15,12 +15,42 @@ class CloudTalkLiveHelperChatClient {
                 'msg_id' => (isset($params['msg']) ? $params['msg']->id : 0),
                 'user_id' => (isset($params['params_dispatch']['caller_user_id']) ? $params['params_dispatch']['caller_user_id'] : 0),
             ));
-
             // Flag call as success while call gets executed
             $params['status'] = true;
         } else {
             self::makeDirectCallAPI($params);
         }
+    }
+
+    public static function sendCueCard($data) {
+        if (class_exists('\erLhcoreClassExtensionLhcphpresque')) {
+            $inst_id = class_exists('\erLhcoreClassInstance') ? \erLhcoreClassInstance::$instanceChat->id : 0;
+            \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionLhcphpresque')->enqueue('lhc_cloudtalk', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient', array(
+                'operation' => 'cue_card',
+                'data' => $data
+            ));
+        } else {
+            self::sendCueCardAPI($data);
+        }
+    }
+
+    private static function sendCueCardAPI($data) {
+        /*$api = \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->getApi();
+        $response = $api->cueCards([
+            //'call_uuid' => $data['call_uuid'],
+            'CallUUID' => $data['call_uuid'],
+            //'ContentHTML' => '[b]asdf[/b]',
+            //'Content' => ['ContentHTML' => '<p>asdf</p>'],
+            'title' => 'Cue Card Title',
+            "type" => "html",//  "html" or "blocks"
+            "Content" => [
+                [
+                    "type" => "ContentBlockTextField",
+                    "name" => "Name",
+                    "value" => "Value",
+                ]
+            ],
+        ]);*/
     }
 
     public function perform() {
@@ -50,7 +80,7 @@ class CloudTalkLiveHelperChatClient {
         // Operations to update admin interface
         // Call failed update call status
         if ($params['status'] == false && isset($params['msg']) && is_object($params['msg'])) {
-            \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($params['msg']->id, 'failure', $params['msg']);
+            \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($params['msg']->id, ['status' => 'failure', 'failure_reason' => 'API Call has failed!'], $params['msg']);
         }
 
         if (isset($params['msg'])) {
@@ -333,7 +363,7 @@ class CloudTalkLiveHelperChatClient {
                             $msg = new \erLhcoreClassModelmsg();
                             $msg->user_id = -1;
                             $msg->time = time();
-                            $msg->msg = 'Please accept a call in your CloudTalk application now!';
+                            $msg->msg = erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Please accept a call in your CloudTalk application now!');
                             $msg->meta_msg = json_encode(['content' => ['cloudcall' => ['content' => $call->id]]]);
                             $msg->chat_id = $params['chat']->id;
                             $msg->saveThis();
