@@ -196,6 +196,7 @@ try {
     // Log error
     \erLhcoreClassLog::write(
         json_encode($data, true).
+        $e->getMessage().
         $e->getTraceAsString(),
         \ezcLog::SUCCESS_AUDIT,
         array(
