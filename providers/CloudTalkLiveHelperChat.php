@@ -10,8 +10,8 @@ namespace LiveHelperChatExtension\cloudtalkio\providers {
             return constant(get_class($this)."::".$const);
         }
 
-        public function makeACall($data){
-            if(!class_exists('\Requests')) {
+        public function makeACall($data) {
+            if (!class_exists('\Requests')) {
                 trigger_error("Unable to load Requests class", E_USER_WARNING);
                 return false;
             }
@@ -21,6 +21,21 @@ namespace LiveHelperChatExtension\cloudtalkio\providers {
             $response_data = json_decode($response->body);
 
             return $response_data;
+        }
+
+        public function cueCards($data) {
+            if(!class_exists('\Requests')) {
+                trigger_error("Unable to load Requests class", E_USER_WARNING);
+                return false;
+            }
+            \Requests::register_autoloader();
+
+            print_r($data);
+
+            $response = \Requests::post( 'https://platform-api.cloudtalk.io/api/cuecards', array(), $data, $this->options);
+            print_r($response);
+
+           /* return $response_data;*/
         }
     }
 }

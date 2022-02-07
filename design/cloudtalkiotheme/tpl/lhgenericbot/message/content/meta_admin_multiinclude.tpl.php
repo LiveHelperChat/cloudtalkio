@@ -1,5 +1,5 @@
 <?php if ($type == 'cloudtalk') : ?>
-<div class="msg-body text-dark bg-white rounded p-3 shadow border mr-0" style="width: 250px">
+<div class="msg-body text-dark bg-white rounded p-3 shadow border mr-2" style="width: 250px">
 
     <h6 class="text-center"><?php echo htmlspecialchars($msg['name_support'])?></h6>
 
