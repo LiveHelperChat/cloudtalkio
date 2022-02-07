@@ -17,6 +17,7 @@ CREATE TABLE `lhc_cloudtalkio_agent_native` (
 CREATE TABLE `lhc_cloudtalkio_call` (
                                         `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                                         `cloudtalk_user_id` bigint(20) unsigned NOT NULL,
+                                        `exclude_autoasign` tinyint(1) unsigned NOT NULL DEFAULT 0,
                                         `user_id` bigint(20) unsigned NOT NULL,
                                         `contact_id` bigint(20) unsigned NOT NULL,
                                         `call_id` bigint(20) unsigned NOT NULL DEFAULT 0,

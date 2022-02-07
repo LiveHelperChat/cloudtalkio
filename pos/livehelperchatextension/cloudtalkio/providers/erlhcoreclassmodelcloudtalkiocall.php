@@ -30,6 +30,7 @@ foreach ([
              'wrapup_time',
              'direction',
              'msg_id',
+             'exclude_autoasign',
          ] as $posAttr) {
     $def->properties[$posAttr] = new ezcPersistentObjectProperty();
     $def->properties[$posAttr]->columnName   = $posAttr;

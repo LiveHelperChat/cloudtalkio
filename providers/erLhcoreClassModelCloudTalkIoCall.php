@@ -41,6 +41,7 @@ class erLhcoreClassModelCloudTalkIoCall
             'status_outcome' => $this->status_outcome,
             'direction' => $this->direction,
             'msg_id' => $this->msg_id,
+            'exclude_autoasign' => $this->exclude_autoasign
         );
     }
 
@@ -130,6 +131,7 @@ class erLhcoreClassModelCloudTalkIoCall
     public $answered_at = 0;
     public $msg_id = 0;
     public $dep_id = 0;
+    public $exclude_autoasign = 0;
     public $status_outcome = self::STATUS_OUTCOME_MISSED;
 
     public $direction = self::DIRECTION_OUTBOUND;

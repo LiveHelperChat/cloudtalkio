@@ -127,6 +127,26 @@ try {
         $callOngoing->answered_at = time();
         $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'status_outcome', 'answered_at','user_id','cloudtalk_user_id']]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,['status' => 'answered', 'answered_at' => time()]);
+
+        // Turn off to agent auto assignment
+        if ($callOngoing->user_id > 0 && ($UserData = \erLhcoreClassModelUser::fetch($callOngoing->user_id)) instanceof \erLhcoreClassModelUser && $UserData->exclude_autoasign == 0) {
+
+            // Auto assignment was changed
+            // On call end we know we have to switch back
+            $callOngoing->exclude_autoasign = 1;
+            $callOngoing->updateThis(['update' => ['exclude_autoasign']]);
+
+            // Change main data
+            $UserData->exclude_autoasign = 1;
+            $UserData->updateThis(['update' => ['exclude_autoasign']]);
+
+            // Update auto exclude
+            $db = ezcDbInstance::get();
+            $stmt = $db->prepare('UPDATE lh_userdep SET exclude_autoasign = :exclude_autoasign WHERE user_id = :user_id');
+            $stmt->bindValue(':user_id', $UserData->id, PDO::PARAM_INT);
+            $stmt->bindValue(':exclude_autoasign', $UserData->exclude_autoasign, PDO::PARAM_INT);
+            $stmt->execute();
+        }
     }
 
     if ($data['action'] == 'ended') {
@@ -137,6 +157,24 @@ try {
         $callOngoing->wrapup_time = $data['wrapup_time'];
         $callOngoing->recording_url = $data['recording_url'];
         $callOngoing->call_id = $data['call_id'];
+
+        // Restore back auto assign workflow
+        if ($callOngoing->exclude_autoasign == 1) {
+            $callOngoing->exclude_autoasign = 0;
+             if ($callOngoing->user_id > 0 && ($UserData = \erLhcoreClassModelUser::fetch($callOngoing->user_id)) instanceof \erLhcoreClassModelUser) {
+                // Change main data
+                $UserData->exclude_autoasign = 0;
+                $UserData->updateThis(['update' => ['exclude_autoasign']]);
+
+                // Update auto exclude
+                $db = ezcDbInstance::get();
+                $stmt = $db->prepare('UPDATE lh_userdep SET exclude_autoasign = :exclude_autoasign WHERE user_id = :user_id');
+                $stmt->bindValue(':user_id', $UserData->id, PDO::PARAM_INT);
+                $stmt->bindValue(':exclude_autoasign', $UserData->exclude_autoasign, PDO::PARAM_INT);
+                $stmt->execute();
+            }
+        }
+
         $callOngoing->updateThis(['update' => [
             'waiting_time',
             'talking_time',
@@ -147,7 +185,8 @@ try {
             'call_uuid',
             'call_id',
             'user_id',
-            'cloudtalk_user_id'
+            'cloudtalk_user_id',
+            'exclude_autoasign'
         ]]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,['status' => 'ended', 'ended_at' => time()]);
     }
