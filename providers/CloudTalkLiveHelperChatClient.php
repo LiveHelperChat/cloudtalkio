@@ -22,41 +22,99 @@ class CloudTalkLiveHelperChatClient {
         }
     }
 
-    public static function sendCueCard($data) {
-        if (class_exists('\erLhcoreClassExtensionLhcphpresque')) {
+    public static function sendCueCard($data, $call) {
+       if (class_exists('\erLhcoreClassExtensionLhcphpresque')) {
             $inst_id = class_exists('\erLhcoreClassInstance') ? \erLhcoreClassInstance::$instanceChat->id : 0;
             \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionLhcphpresque')->enqueue('lhc_cloudtalk', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient', array(
                 'operation' => 'cue_card',
-                'data' => $data
+                'data' => $data,
+                'call_id' => $call->id
             ));
         } else {
-            self::sendCueCardAPI($data);
+            self::sendCueCardAPI($data, $call);
         }
     }
 
-    private static function sendCueCardAPI($data) {
-        /*$api = \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->getApi();
-        $response = $api->cueCards([
-            //'call_uuid' => $data['call_uuid'],
-            'CallUUID' => $data['call_uuid'],
-            //'ContentHTML' => '[b]asdf[/b]',
-            //'Content' => ['ContentHTML' => '<p>asdf</p>'],
-            'title' => 'Cue Card Title',
-            "type" => "html",//  "html" or "blocks"
-            "Content" => [
-                [
-                    "type" => "ContentBlockTextField",
-                    "name" => "Name",
-                    "value" => "Value",
-                ]
-            ],
-        ]);*/
+    private static function sendCueCardAPI($data, $call) {
+
+        $api = \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->getApi();
+
+        $cueCardData = [
+            'call_uuid' => $data['call_uuid'],
+            'icon_url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::design('images/general/logo_user.png'),
+            'title' =>  ($call->nick != '' ? $call->nick : 'Visitor') . ($call->chat_id > 0 ? ' | Chat ID - ' . $call->chat_id : ''),
+            'subtitle' => (string)$call->department . ($call->email != '' ? ' | ' . $call->email : ''),
+            "type" => "html",
+            "content" => '',
+        ];
+
+        $elements = ['<ul>'];
+
+        if (class_exists('\erLhcoreClassExtensionElasticsearch')) {
+            if ($call->email != '') {
+                $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/email/(val)/' . rawurlencode($call->email).'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions') . '</a></li>';
+            } else {
+                $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/phone/(val)/' . rawurlencode($call->phone).'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions') . '</a></li>';
+            }
+        } else {
+            if ($call->email != '') {
+                $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/chat/list') . '/(email)/' . rawurlencode($call->email).'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor chats') . '</a></li>';
+            }
+        }
+
+        if ($call->chat_id > 0) {
+            $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/chat/single') . '/' . $call->chat_id.'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Chat ID') . ' - ' . $call->chat_id . '</a></li>';
+        }
+
+        $elements[] = '</ul>';
+
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.cue_card',array('call' => & $call, 'data' => & $data, 'elements' => & $elements));
+
+        $cueCardData['content'] = implode('',$elements);
+
+        $response = $api->cueCards($cueCardData);
+
+        if (!is_object($response) || !isset($response->success) || $response->success == false) {
+            \erLhcoreClassLog::write(
+                \json_encode($response, true).
+                \json_encode($cueCardData, true),
+                \ezcLog::SUCCESS_AUDIT,
+                array(
+                    'source' => 'cloudtalk',
+                    'category' => 'cloudtalk',
+                    'line' => __LINE__,
+                    'file' => __FILE__,
+                    'object_id' => $call->id
+                )
+            );
+        }
     }
 
     public function perform() {
 
         $db = \ezcDbInstance::get();
         $db->reconnect(); // Because it timeouts automatically, this calls to reconnect to database, this is implemented in 2.52v
+
+        // Update CueCard in the background
+        if (isset($this->args['operation']) && $this->args['operation'] == 'cue_card') {
+            $call = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::fetch($this->args['call_id']);
+            if ($call instanceof \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall) {
+                self::sendCueCardAPI($this->args['data'], $call);
+            } else {
+                \erLhcoreClassLog::write(
+                    'CueCard Call not found!',
+                    \ezcLog::SUCCESS_AUDIT,
+                    array(
+                        'source' => 'cloudtalk',
+                        'category' => 'cloudtalk',
+                        'line' => __LINE__,
+                        'file' => __FILE__,
+                        'object_id' => $call->id
+                    )
+                );
+            }
+            return;
+        }
 
         $chat = \erLhcoreClassModelChat::fetch($this->args['chat_id']);
         $status = false;
