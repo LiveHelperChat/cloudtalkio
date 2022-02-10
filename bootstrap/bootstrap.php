@@ -5,6 +5,31 @@ class erLhcoreClassExtensionCloudtalkio {
     public function __construct() {
         $dispatcher = erLhcoreClassChatEventDispatcher::getInstance();
         $dispatcher->listen('chat.genericbot_chat_command_dispatch_event', 'erLhcoreClassExtensionCloudtalkio::listenDispatchEvent');
+
+        // Elastic search related event listeners
+        if (class_exists('\erLhcoreClassExtensionElasticsearch')) { // Check that this extension exists
+            // Records indexing
+            $dispatcher->listen('cloudtalk.call.after_update', 'erLhcoreClassExtensionCloudtalkio::callIndex');
+            $dispatcher->listen('cloudtalk.call.after_save', 'erLhcoreClassExtensionCloudtalkio::callIndex');
+
+            // Elastic search structure
+            $dispatcher->listen('system.getelasticstructure_core', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatESIndex::elasticSearchStructure');
+            $dispatcher->listen('system.elastic_search.index_objects', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatESIndex::doCallIndex');
+            $dispatcher->listen('elasticsearch.interactions_index', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatESIndex::interactionsIndex');
+            $dispatcher->listen('elasticsearch.interactions_class', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatESIndex::interactionsClass');
+        }
+    }
+
+    public static function callIndex($params) {
+        $db = ezcDbInstance::get();
+        $stmt = $db->prepare('INSERT IGNORE INTO lhc_lhesctcall_index (`call_id`) VALUES (:call_id)');
+        $stmt->bindValue(':call_id', $params['call']->id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        // Schedule background worker for instant indexing
+        if (class_exists('erLhcoreClassExtensionLhcphpresque')) {
+            erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionLhcphpresque')->enqueue('lhc_elastic_queue', 'erLhcoreClassElasticSearchWorker', array());
+        }
     }
 
     // Continue here

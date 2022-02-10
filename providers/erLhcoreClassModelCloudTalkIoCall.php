@@ -111,6 +111,20 @@ class erLhcoreClassModelCloudTalkIoCall
         }
     }
 
+    public function afterSave($params = array())
+    {
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.call.after_save',array(
+            'call' => & $this
+        ));
+    }
+
+    public function afterUpdate($params = array())
+    {
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.call.after_update',array(
+            'call' => & $this
+        ));
+    }
+
     const STATUS_PENDING = 0;
     const STATUS_STARTED = 1;
     const STATUS_RINGING_AGENT = 2;

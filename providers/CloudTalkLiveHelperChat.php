@@ -17,25 +17,24 @@ namespace LiveHelperChatExtension\cloudtalkio\providers {
             }
             \Requests::register_autoloader();
 
-            $response = \Requests::post($this->getConstant('API_URL').'/calls/create.json', array(), $data, $this->options);
+            $response = \Requests::post($this->getConstant('API_URL').'/calls/create.json', array('Content-Type' => 'application/json'), json_encode($data), array_merge($this->options, ['verify' => false]));
+
             $response_data = json_decode($response->body);
 
             return $response_data;
         }
 
         public function cueCards($data) {
+
             if(!class_exists('\Requests')) {
                 trigger_error("Unable to load Requests class", E_USER_WARNING);
                 return false;
             }
             \Requests::register_autoloader();
 
-            print_r($data);
+            $response = \Requests::post( 'https://platform-api.cloudtalk.io/api/cuecards', array('Content-Type' => 'application/json'), json_encode($data), array_merge($this->options, ['verify' => false]));
 
-            $response = \Requests::post( 'https://platform-api.cloudtalk.io/api/cuecards', array(), $data, $this->options);
-            print_r($response);
-
-           /* return $response_data;*/
+            return json_decode($response->body);
         }
     }
 }

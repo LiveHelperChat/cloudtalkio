@@ -60,3 +60,10 @@ CREATE TABLE `lhc_cloudtalkio_phone_number` (
     PRIMARY KEY (`id`),
     UNIQUE KEY `phone` (`phone`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `lhc_lhesctcall_index` (
+                                        `call_id` bigint(20) unsigned NOT NULL,
+                                        `status` tinyint(1) unsigned NOT NULL DEFAULT 0,
+                                        `udate` bigint(20) unsigned NOT NULL DEFAULT 0,
+                                        UNIQUE KEY `call_id` (`call_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
