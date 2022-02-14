@@ -425,6 +425,12 @@ class CloudTalkLiveHelperChatClient {
                         $call->email = (string)$params['chat']->email;
                         $call->phone = $phone;
                         $call->nick = (string)$params['chat']->nick;
+
+                        // Update call variables instantly
+                        if ($call->call_variables == '' && $params['chat']->chat_variables != '') {
+                            $call->call_variables = (string)$params['chat']->chat_variables;
+                        }
+
                         $call->saveThis();
 
                         if (isset($params['init']) && $params['init'] == 'visitor') {
