@@ -22,9 +22,14 @@ class erLhcoreClassExtensionCloudtalkio {
 
     public static function callIndex($params) {
         $db = ezcDbInstance::get();
-        $stmt = $db->prepare('INSERT IGNORE INTO lhc_lhesctcall_index (`call_id`) VALUES (:call_id)');
-        $stmt->bindValue(':call_id', $params['call']->id, PDO::PARAM_INT);
-        $stmt->execute();
+        
+        try {
+            $stmt = $db->prepare('INSERT IGNORE INTO lhc_lhesctcall_index (`call_id`) VALUES (:call_id)');
+            $stmt->bindValue(':call_id', $params['call']->id, PDO::PARAM_INT);
+            $stmt->execute();
+        } catch (Exception $e) {
+            // Ignore
+        }
 
         // Schedule background worker for instant indexing
         if (class_exists('erLhcoreClassExtensionLhcphpresque')) {
