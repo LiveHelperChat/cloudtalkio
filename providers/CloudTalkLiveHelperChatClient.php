@@ -204,6 +204,11 @@ class CloudTalkLiveHelperChatClient {
             throw new \Exception('Internal phone number not found!');
         }
 
+        $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
+        $call->call_uuid = $data['call_uuid'];
+        $call->dep_id = $phoneNumberInternal->dep_id;
+        $call->saveThis();
+
         $chat = new \erLhcoreClassModelChat();
         $chat->phone = '+'.$data['external_number'];
         $chat->dep_id = $phoneNumberInternal->dep_id;
@@ -212,10 +217,10 @@ class CloudTalkLiveHelperChatClient {
         // For extensions to listen for event and prefill details
         \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('data' => & $data, 'chat' => & $chat));
 
+        $call->refreshThis();
+
         // Create a call record
-        $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
         $call->cloudtalk_user_id = (int)$data['agent_id'];
-        $call->call_uuid = $data['call_uuid'];
         $call->dep_id = $chat->dep_id;
         $call->email = (string)$chat->email;
         $call->chat_id = 0;
@@ -246,6 +251,11 @@ class CloudTalkLiveHelperChatClient {
             throw new \Exception('Internal phone number not found!');
         }
 
+        $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
+        $call->call_uuid = $data['call_uuid'];
+        $call->dep_id = $phoneNumberInternal->dep_id;
+        $call->saveThis();
+
         $chat = new \erLhcoreClassModelChat();
         $chat->phone = '+'.$data['external_number'];
         $chat->dep_id = $phoneNumberInternal->dep_id;
@@ -254,11 +264,12 @@ class CloudTalkLiveHelperChatClient {
         // For extensions to listen for event and prefill details
         \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('data' => & $data, 'chat' => & $chat));
 
-        $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
+        $call->refreshThis();
+
         if ((int)$data['agent_id'] > 0) {
             $call->cloudtalk_user_id = (int)$data['agent_id'];
         }
-        $call->call_uuid = $data['call_uuid'];
+
         $call->dep_id = $chat->dep_id;
         $call->email = (string)$chat->email;
         $call->chat_id = 0;

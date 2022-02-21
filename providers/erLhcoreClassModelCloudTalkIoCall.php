@@ -144,7 +144,7 @@ class erLhcoreClassModelCloudTalkIoCall
     public $id = null;
     public $cloudtalk_user_id = 0;
     public $user_id = 0;
-    public $chat_id = null;
+    public $chat_id = 0;
     public $date_from = 0;
     public $date_to = 0;
     public $contact_id = 0;

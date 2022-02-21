@@ -87,11 +87,11 @@ try {
             $callOngoing = erLhcoreClassModelCloudTalkIoCall::findOne(['filter' => ['call_uuid' => $data['call_uuid']]]);
 
             if (!($callOngoing instanceof erLhcoreClassModelCloudTalkIoCall)) {
-                throw new \Exception('call not found!');
+                throw new \Exception('call not found! [outgoing]');
             }
 
         } else {
-            throw new \Exception('call not found!');
+            throw new \Exception('call not found! [incoming]');
         }
     }
 
