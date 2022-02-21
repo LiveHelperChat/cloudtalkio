@@ -37,7 +37,7 @@ try {
         'msg'  => & $message,
         'init' => 'visitor',
         'params_dispatch' => [
-            'caller_user_id' => ($chat->user_id > 0 ? $chat->user_id : $message->user_id),
+            'caller_user_id' => ($message->user_id > 0 ? $message->user_id : $chat->user_id),
             'caller_user_class' => 'erLhcoreClassModelUser'
         ]
     ]);
