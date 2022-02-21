@@ -34,18 +34,6 @@ namespace LiveHelperChatExtension\cloudtalkio\providers {
 
             $response = \Requests::post( 'https://platform-api.cloudtalk.io/api/cuecards', array('Content-Type' => 'application/json'), json_encode($data), array_merge($this->options, ['verify' => false]));
 
-            \erLhcoreClassLog::write(
-                \json_encode($response, true),
-                \ezcLog::SUCCESS_AUDIT,
-                array(
-                    'source' => 'cloudtalk',
-                    'category' => 'cloudtalk',
-                    'line' => __LINE__,
-                    'file' => __FILE__,
-                    'object_id' => 0
-                )
-            );
-
             return json_decode($response->body);
         }
     }
