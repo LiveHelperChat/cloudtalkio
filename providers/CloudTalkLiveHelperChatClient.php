@@ -216,8 +216,6 @@ class CloudTalkLiveHelperChatClient {
         // For extensions to listen for event and prefill details
         \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
 
-        $call->refreshThis();
-
         // Create a call record
         $call->cloudtalk_user_id = (int)$data['agent_id'];
         $call->dep_id = $chat->dep_id;
@@ -265,8 +263,6 @@ class CloudTalkLiveHelperChatClient {
 
         // For extensions to listen for event and prefill details
         \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
-
-        $call->refreshThis();
 
         if ((int)$data['agent_id'] > 0) {
             $call->cloudtalk_user_id = (int)$data['agent_id'];
