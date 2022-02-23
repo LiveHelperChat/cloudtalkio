@@ -192,7 +192,6 @@ class CloudTalkLiveHelperChatClient {
 
     public static function contactByIncommingCall(& $data)
     {
-
         // Call exists, we don't need to do anything
         if (\LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getCount(['filter' => ['call_uuid' => $data['call_uuid']]]) > 0) {
             return;
@@ -215,7 +214,7 @@ class CloudTalkLiveHelperChatClient {
         $chat->nick = $data['external_number'];
 
         // For extensions to listen for event and prefill details
-        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('data' => & $data, 'chat' => & $chat));
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
 
         $call->refreshThis();
 
@@ -236,6 +235,9 @@ class CloudTalkLiveHelperChatClient {
             $call->call_variables = (string)$chat->chat_variables;
         }
         $call->saveThis();
+
+        // For extensions to listen for event and prefill details
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone_after',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
 
         // Create a contact
         $data['contact_id'] = self::createContactByChat($chat);
@@ -262,7 +264,7 @@ class CloudTalkLiveHelperChatClient {
         $chat->nick = $data['external_number'];
 
         // For extensions to listen for event and prefill details
-        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('data' => & $data, 'chat' => & $chat));
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
 
         $call->refreshThis();
 
@@ -286,6 +288,9 @@ class CloudTalkLiveHelperChatClient {
         $call->nick = (string)$chat->nick;
         $call->contact_id = $data['contact_id'];
         $call->saveThis();
+
+        // For extensions to listen for event and prefill details
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone_after',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
 
         self::createContactByChat($chat, $call->contact_id);
     }
