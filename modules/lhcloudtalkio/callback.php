@@ -106,7 +106,16 @@ try {
     }
 
     if ($data['action'] == 'call_started') {
-        $callOngoing->status = erLhcoreClassModelCloudTalkIoCall::STATUS_STARTED;
+        $callRefreshed = erLhcoreClassModelCloudTalkIoCall::fetch($callOngoing->id);
+
+        // Sometimes create a contact call takes long time
+        // So we want to be sure that status was not changed already
+        if ($callRefreshed->status == erLhcoreClassModelCloudTalkIoCall::STATUS_PENDING) {
+            $callOngoing->status = erLhcoreClassModelCloudTalkIoCall::STATUS_STARTED;
+        } else {
+            $callOngoing->status = $callRefreshed->status;
+        }
+
         $callOngoing->direction = $data['direction'] == 'outgoing' ? erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND : erLhcoreClassModelCloudTalkIoCall::DIRECTION_INCOMMING;
         $callOngoing->updateThis(['update' => ['status','call_uuid','direction','cloudtalk_user_id','user_id']]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,'call_started');
