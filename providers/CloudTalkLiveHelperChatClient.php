@@ -231,6 +231,7 @@ class CloudTalkLiveHelperChatClient {
         }
         if ($chat->chat_variables != '') {
             $call->call_variables = (string)$chat->chat_variables;
+            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.call_variables_set',array('call' => & $call));
         }
         $call->saveThis();
 
@@ -280,6 +281,7 @@ class CloudTalkLiveHelperChatClient {
         }
         if ($chat->chat_variables != '') {
             $call->call_variables = (string)$chat->chat_variables;
+            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.call_variables_set',array('call' => & $call));
         }
         $call->nick = (string)$chat->nick;
         $call->contact_id = $data['contact_id'];
@@ -441,6 +443,7 @@ class CloudTalkLiveHelperChatClient {
                         // Update call variables instantly
                         if ($call->call_variables == '' && $params['chat']->chat_variables != '') {
                             $call->call_variables = (string)$params['chat']->chat_variables;
+                            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.call_variables_set',array('call' => & $call));
                         }
 
                         $call->saveThis();
