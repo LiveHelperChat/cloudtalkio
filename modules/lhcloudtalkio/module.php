@@ -36,7 +36,7 @@ $ViewList['elastichistory'] = array(
         'chat_call'
     ),
     'functions' => array(
-        'use_admin'
+        'use_operator'
     ),
     'multiple_arguments' => array(
         'department_ids',
@@ -68,7 +68,7 @@ $ViewList['history'] = array(
         'chat_call'
     ),
     'functions' => array(
-        'use_admin'
+        'use_operator'
     ),
     'multiple_arguments' => array(
         'department_ids',
