@@ -10,10 +10,26 @@ if (isset($_GET['doSearch'])) {
     $filterParams['is_search'] = false;
 }
 
+erLhcoreClassChatStatistic::formatUserFilter($filterParams, 'lhc_cloudtalkio_call');
+
+if (isset($filterParams['filter']['filterin']['lh_chat.dep_id'])) {
+    $filterParams['filter']['filterin']['dep_id'] = $filterParams['filter']['filterin']['lh_chat.dep_id'];
+    unset($filterParams['filter']['filterin']['lh_chat.dep_id']);
+}
+
 $append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form']);
 
+$rowsNumber = null;
+
+$filterWithoutSort = $filterParams['filter'];
+unset($filterWithoutSort['sort']);
+
+if (empty($filterWithoutSort)) {
+    $rowsNumber = ($rowsNumber = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::estimateRows()) && $rowsNumber > 10000 ? $rowsNumber : null;
+}
+
 $pages = new lhPaginator();
-$pages->items_total = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getCount($filterParams['filter']);
+$pages->items_total = is_numeric($rowsNumber) ? $rowsNumber : \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getCount($filterParams['filter']);
 $pages->translationContext = 'chat/activechats';
 $pages->serverURL = erLhcoreClassDesign::baseurl('cloudtalkio/history').$append;
 $pages->paginate();

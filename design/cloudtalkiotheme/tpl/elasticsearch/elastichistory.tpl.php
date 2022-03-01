@@ -65,7 +65,7 @@
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_ENDED) : ?>
                         <span class="badge badge-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ended')?></span>
                     <?php endif; ?>
-                    
+
                     <?php if ($item->exclude_autoasign == 1) : ?>
                         <span title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/cloudtalk','Auto assignment is turned off while call is happening');?>" class="material-icons text-danger">assignment_turned_in</span>
                     <?php endif;?>
@@ -86,7 +86,7 @@
                 <td title="<?php echo htmlspecialchars($item->call_uuid)?>">
                     <?php echo $item->call_id?>
                     <?php if ($item->recording_url != '') : ?>
-                    <a href="<?php echo $item->recording_url?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Download a record')?>" target="_blank" class="material-icons">play_arrow</a>
+                        <a href="<?php echo $item->recording_url?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Download a record')?>" target="_blank" class="material-icons">play_arrow</a>
                     <?php endif; ?>
                 </td>
                 <td>

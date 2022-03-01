@@ -14,9 +14,68 @@ $ViewList['agents'] = array(
     'functions' => array('use_admin'),
 );
 
+$ViewList['elastichistory'] = array(
+    'params' => array(),
+    'uparams' => array(
+        'phone',
+        'status',
+        'department_ids',
+        'department_group_ids',
+        'username',
+        'timefrom',
+        'timefrom_hours',
+        'timefrom_minutes',
+        'timeto',
+        'timeto_hours',
+        'timeto_minutes',
+        'user_ids',
+        'group_ids',
+        'sortby',
+        'direction',
+        'status_outcome',
+        'chat_call'
+    ),
+    'functions' => array(
+        'use_admin'
+    ),
+    'multiple_arguments' => array(
+        'department_ids',
+        'department_group_ids',
+        'user_ids',
+        'group_ids',
+    )
+);
+
 $ViewList['history'] = array(
     'params' => array(),
-    'functions' => array('use_admin'),
+    'uparams' => array(
+        'phone',
+        'status',
+        'department_ids',
+        'department_group_ids',
+        'username',
+        'timefrom',
+        'timefrom_hours',
+        'timefrom_minutes',
+        'timeto',
+        'timeto_hours',
+        'timeto_minutes',
+        'user_ids',
+        'group_ids',
+        'sortby',
+        'direction',
+        'status_outcome',
+        'chat_call'
+    ),
+    'functions' => array(
+        'use_admin'
+    ),
+    'multiple_arguments' => array(
+        'department_ids',
+        'department_group_ids',
+        'user_ids',
+        'group_ids',
+    )
 );
 
 $ViewList['agentsnative'] = array(

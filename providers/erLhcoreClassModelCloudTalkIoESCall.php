@@ -73,6 +73,24 @@ class erLhcoreClassModelCloudTalkIoESCall
                 }
                 return $this->user;
 
+            case 'call_variables_array':
+                if (!empty($this->call_variables)) {
+                    $jsonData = json_decode($this->call_variables,true);
+                    if ($jsonData !== null) {
+                        $this->call_variables_array = $jsonData;
+                    } else {
+                        $this->call_variables_array = $this->call_variables;
+                    }
+                } else {
+                    $this->call_variables_array = array();
+                }
+                return $this->call_variables_array;
+
+            case 'cloudtalk_user':
+                $this->cloudtalk_user = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::findOne(['filter' => [
+                    'cloudtalk_user_id' => $this->cloudtalk_user_id
+                ]]);
+                return $this->cloudtalk_user;
 
             default:
                 break;
