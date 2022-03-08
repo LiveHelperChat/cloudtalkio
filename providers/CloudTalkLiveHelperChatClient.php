@@ -163,8 +163,19 @@ class CloudTalkLiveHelperChatClient {
         $msg->time = time();
         $msg->chat_id = $chat->id;
 
-        if ($chat->phone != '' && is_object($agent)) {
-            $msg->meta_msg = json_encode(['content' => ['extension' => true, 'cloudtalk' => ['status' => 'invite']]]);
+        if (isset($params['params_dispatch']['arg_2']) && !empty($params['params_dispatch']['arg_2']) != '' && is_object($agent)) {
+
+            $args = ['content' => ['extension' => true, 'cloudtalk' => [
+                'phone' =>  $params['params_dispatch']['arg_2'],
+                'status' => 'invite']]];
+
+            if (isset($params['params_dispatch']['arg_3']) && $params['params_dispatch']['arg_3'] == 'updatephone') {
+                $args['content']['cloudtalk']['status'] = 'updatephone';
+                $args['content']['cloudtalk']['sub_status'] = 'pending_update';
+                $args['content']['cloudtalk']['mode'] = 'phone';
+            }
+
+            $msg->meta_msg = json_encode($args);
             $msg->msg = '';
             $msg->user_id = $params['params_dispatch']['caller_user_id'];
             $msg->name_support = \erLhcoreClassModelUser::fetch($params['params_dispatch']['caller_user_id'])->name_support;
@@ -382,7 +393,16 @@ class CloudTalkLiveHelperChatClient {
 
     private static function makeDirectCallAPI($params) {
 
-        $phone = $params['chat']->phone;
+        if (isset($params['msg'])) {
+            $metaMessage = $params['msg']->meta_msg_array;
+            if (isset($metaMessage['content']['cloudtalk']['phone']) && !empty($metaMessage['content']['cloudtalk']['phone'])) {
+                $phone = $metaMessage['content']['cloudtalk']['phone'];
+            }
+        }
+
+        if (empty($phone)) {
+            $phone = $params['chat']->phone;
+        }
 
         try {
 

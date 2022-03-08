@@ -2,7 +2,11 @@
 <div class="msg-body text-dark bg-white rounded p-3 shadow border mr-2" style="width: 250px">
 
     <h6 class="text-center">
-        <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Call with')?> - <?php echo htmlspecialchars($msg['name_support'])?>
+        <?php if (isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone') : ?>
+            <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Phone number update')?>
+        <?php else : ?>
+            <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Call with')?> - <?php echo htmlspecialchars($msg['name_support'])?>
+        <?php endif; ?>
     </h6>
 
     <div id="status-call-<?php echo $msg['id']?>">
