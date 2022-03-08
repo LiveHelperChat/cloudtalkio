@@ -4,13 +4,25 @@
         $('#chat-cloudtalk-invitation-btn-'+chat_id+',#chat-cloudtalk-invitation-btn-right-'+chat_id).click(function(event){
             event.preventDefault();
             event.stopPropagation();
-            lhinst.addmsgadmin(chat_id,'!cloudtalk --silent');
+            lhinst.addmsgadmin(chat_id,'!cloudtalk --silent --arg ' + $(this).attr('data-phone'));
+        });
+
+        $('#chat-cloudtalk-updatenumber-btn-right-'+chat_id).click(function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            lhinst.addmsgadmin(chat_id,'!cloudtalk --silent --arg ' + $(this).attr('data-phone') + ' --arg updatephone');
         });
 
         $('#chat-cloudtalk-direct-'+chat_id).click(function(event){
             event.preventDefault();
             event.stopPropagation();
-            lhinst.addmsgadmin(chat_id,'!cloudtalkdirect --silent');
+            lhinst.addmsgadmin(chat_id,'!cloudtalkdirect --silent --arg ' + $(this).attr('data-phone'));
+        });
+
+        $('#chat-cloudtalk-editphone-btn-right-'+chat_id).click(function(event){
+            event.preventDefault();
+            event.stopPropagation();
+            lhc.revealModal({'url':WWW_DIR_JAVASCRIPT+'cloudtalkio/updatephoneoperator/'+chat_id});
         });
     }
 

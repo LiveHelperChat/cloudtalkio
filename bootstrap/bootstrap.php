@@ -47,7 +47,7 @@ class erLhcoreClassExtensionCloudtalkio {
     }
 
     public function run() {
-
+        
     }
 
     public static function getSession() {

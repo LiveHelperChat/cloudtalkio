@@ -120,6 +120,11 @@ $ViewList['monitorcall'] = array(
     'functions' => array('use_operator'),
 );
 
+$ViewList['updatephoneoperator'] = array(
+    'params' => array('id'),
+    'functions' => array('use_operator'),
+);
+
 $ViewList['cancelcall'] = array(
     'params' => array('id'),
     'functions' => array('use_operator'),
@@ -131,6 +136,11 @@ $ViewList['callback'] = array(
 
 $ViewList['startacall'] = array(
     'params' => array('chat_id','hash','msg_id'),
+);
+
+$ViewList['updatephone'] = array(
+    'params' => array('chat_id','hash','msg_id'),
+    'uparams' => array('mode'),
 );
 
 $ViewList['checkcallstatus'] = array(

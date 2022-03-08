@@ -9,13 +9,16 @@
         <?php endif; ?>
 
         <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_direct')) : ?>
-        <br/><span class="text-primary action-image" id="chat-cloudtalk-direct-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will start call directly')?>"><span class="material-icons" >phone</span> <?php echo htmlspecialchars($chat->phone)?></span>
+        <br/><span class="text-primary action-image" data-phone="<?php echo htmlspecialchars($chat->phone)?>" id="chat-cloudtalk-direct-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will start call directly')?>"><span class="material-icons" >phone</span> <?php echo htmlspecialchars($chat->phone)?></span>
         <?php endif; ?>
+
     </div>
 
     <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_operator')) : ?>
     <div class="col-6 pb-1" ng-non-bindable>
-        <span class="text-primary action-image" id="chat-cloudtalk-invitation-btn-right-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will send invite to call with a chat widget.')?>"><span class="material-icons" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/adminchat','Phone')?>">phone</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Invite to call')?></span>
+        <span class="text-primary action-image d-block" data-phone="<?php echo htmlspecialchars($chat->phone)?>" id="chat-cloudtalk-invitation-btn-right-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will send invite to call with a chat widget.')?>"><span class="material-icons" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/adminchat','Phone')?>">phone</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Invite to call')?></span>
+        <span class="text-primary action-image d-block" data-phone="<?php echo htmlspecialchars($chat->phone)?>" id="chat-cloudtalk-updatenumber-btn-right-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will send a widget to update phone number.')?>"><span class="material-icons" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/adminchat','Phone')?>">phone</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Invite to update number')?></span>
+        <span class="text-primary action-image d-block" data-phone="<?php echo htmlspecialchars($chat->phone)?>" id="chat-cloudtalk-editphone-btn-right-<?php echo $chat->id?>" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','We will send a widget to update phone number.')?>"><span class="material-icons" title="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/adminchat','Edit')?>">edit</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Edit phone')?></span>
     </div>
     <?php endif; ?>
 

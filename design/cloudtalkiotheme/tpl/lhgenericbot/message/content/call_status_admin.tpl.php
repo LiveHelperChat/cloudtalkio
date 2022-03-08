@@ -1,16 +1,30 @@
 <?php if ($metaMessage['status'] == 'invite') : // Invite to start a call from visitor ?>
-    <p class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Waiting for visitor to start a call')?></p>
-    <button type="button" onclick="ee.emitEvent('cloudtalk.cancel_call', [<?php echo $msg['id']?>]);" class="btn d-block w-100 btn-sm btn-warning">
-        <span class="material-icons">phone_disabled</span>Cancel an invitation
-    </button>
+
+    <?php if (isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone') : ?>
+        <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>
+            <p class="text-center text-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor has updated phone')?></p>
+        <?php elseif (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'invalid_phone') : ?>
+            <p class="text-center text-danger"><?php echo htmlspecialchars($metaMessage['message_validation'])?></p>
+        <?php else : ?>
+            <p class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor updating phone')?></p>
+        <?php endif; ?>
+    <?php else : ?>
+        <p class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Waiting for visitor to start a call')?></p>
+        <button type="button" onclick="ee.emitEvent('cloudtalk.cancel_call', [<?php echo $msg['id']?>]);" class="btn d-block w-100 btn-sm btn-warning">
+            <span class="material-icons">phone_disabled</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Cancel an invitation')?>
+            <?php if (isset($metaMessage['phone'])) : ?><?php echo htmlspecialchars($metaMessage['phone'])?><?php endif;?>
+        </button>
+    <?php endif; ?>
+
+<?php elseif ($metaMessage['status'] == 'updatephone') : ?>
+
+    <p class="text-center text-info"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor updating phone')?></p>
+
 <?php elseif ($metaMessage['status'] == 'start_sync') : // Invite to start a call from visitor ?>
-
     <p class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Calling to an operator...')?></p>
-
     <button type="button" onclick="ee.emitEvent('cloudtalk.cancel_call', [<?php echo $msg['id']?>]);" class="btn d-block w-100 btn-sm btn-warning">
-        <span class="material-icons">phone_disabled</span>Cancel a call
+        <span class="material-icons">phone_disabled</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Cancel a call')?>
     </button>
-
 <?php elseif ($metaMessage['status'] == 'call_started') : // Invite to start a call from visitor ?>
     <div class="bg-primary rounded p-2 text-white fs14"><span class="material-icons">phone</span> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Calling to visitor...')?></div>
 <?php elseif ($metaMessage['status'] == 'canceled') : ?>
