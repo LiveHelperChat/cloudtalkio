@@ -13,10 +13,7 @@
             <?php include(erLhcoreClassDesign::designtpl('lhkernel/alert_success.tpl.php'));?>
         <?php endif; ?>
 
-        <div class="form-group">
-            <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/modifychat','Phone');?></label>
-            <input class="form-control form-control-sm" type="text" placeholder="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/modifychat','Phone');?>" name="UserPhone" value="<?php echo htmlspecialchars($chat->phone);?>" />
-        </div>
+        <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/parts/form_updatephoneoperator.tpl.php'));?>
 
         <button type="submit" class="btn btn-sm btn-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/blockedusers','Update')?></button>
     </form>

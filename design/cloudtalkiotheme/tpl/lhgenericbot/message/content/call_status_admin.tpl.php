@@ -2,7 +2,7 @@
 
     <?php if (isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone') : ?>
         <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>
-            <p class="text-center text-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor has updated phone')?></p>
+            <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/admin_status/phone_updated.tpl.php')); ?>
         <?php elseif (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'invalid_phone') : ?>
             <p class="text-center text-danger"><?php echo htmlspecialchars($metaMessage['message_validation'])?></p>
         <?php else : ?>

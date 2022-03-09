@@ -26,11 +26,11 @@ if ($ext == 'cloudtalk-call') : ?>
             return;
         }
 
-        console.log(params);
-
         var state = getState();
         var chat_id = state.chatwidget.getIn(['chatData', 'id']);
         var hash = state.chatwidget.getIn(['chatData', 'hash']);
+
+        <?php include(erLhcoreClassDesign::designtpl('lhwidgetrestapi/cloudtalk_executejs_multiinclude.tpl.php'));?>
 
         if (params['method'] && params['method'] == 'init_phone_form') {
             var loadcbCloudTalk = function() {
@@ -98,7 +98,9 @@ if ($ext == 'cloudtalk-call') : ?>
 
                     var updateElm = document.getElementById('update-phone-action-'+params['msg_id']);
                     updateElm && updateElm.addEventListener('click', function(){
-                        window.lhcAxios.post('<?php echo '//' . $_SERVER['HTTP_HOST'] . erLhcoreClassDesign::baseurl('cloudtalkio/updatephone')?>/' + chat_id + '/' + hash + '/' + params['msg_id'] + '/(mode)/updatephone', {'phone': phoneInput.value}, {headers : {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function(response) {
+                        var payload = {'phone': phoneInput.value};
+                        <?php include(erLhcoreClassDesign::designtpl('lhwidgetrestapi/cloudtalk_updatephone_payload_multiinclude.tpl.php'));?>
+                        window.lhcAxios.post('<?php echo '//' . $_SERVER['HTTP_HOST'] . erLhcoreClassDesign::baseurl('cloudtalkio/updatephone')?>/' + chat_id + '/' + hash + '/' + params['msg_id'] + '/(mode)/updatephone', payload, {headers : {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function(response) {
                             updateMessage({'msg_id' : params['msg_id'] ,'id' : chat_id, 'hash' : hash})(dispatch, getState);
                         });
                     });
@@ -109,6 +111,9 @@ if ($ext == 'cloudtalk-call') : ?>
                             updateMessage({'msg_id' : params['msg_id'] ,'id' : chat_id, 'hash' : hash})(dispatch, getState);
                         });
                     });
+
+                    <?php include(erLhcoreClassDesign::designtpl('lhwidgetrestapi/cloudtalk_updatephone_executejs_multiinclude.tpl.php'));?>
+
                 }
             };
 
@@ -132,7 +137,9 @@ if ($ext == 'cloudtalk-call') : ?>
             }
 
         if (params['method'] && params['method'] == 'update_phone') {
-            window.lhcAxios.post('<?php echo '//' . $_SERVER['HTTP_HOST'] . erLhcoreClassDesign::baseurl('cloudtalkio/updatephone')?>/' + chat_id + '/' + hash + '/' + params['msg_id'] + '/(mode)/editphone', {headers : {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function(response) {
+            var payload = {};
+            <?php include(erLhcoreClassDesign::designtpl('lhwidgetrestapi/cloudtalk_updatephone_payload_multiinclude.tpl.php'));?>
+            window.lhcAxios.post('<?php echo '//' . $_SERVER['HTTP_HOST'] . erLhcoreClassDesign::baseurl('cloudtalkio/updatephone')?>/' + chat_id + '/' + hash + '/' + params['msg_id'] + '/(mode)/editphone', payload, {headers : {'Content-Type': 'application/x-www-form-urlencoded'}}).then(function(response) {
                 updateMessage({'msg_id' : params['msg_id'] ,'id' : chat_id, 'hash' : hash})(dispatch, getState);
             });
             return;

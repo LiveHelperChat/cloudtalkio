@@ -1,0 +1,1 @@
+<p class="text-center text-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor has updated phone')?></p>
