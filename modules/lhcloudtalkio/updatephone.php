@@ -44,12 +44,18 @@ try {
             $invalidMessage = $e->getMessage();
         }
 
-        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, [
+        $updatePayload = [
             'status' => 'invite',
             'status_sub' => (empty($invalidMessage) ? 'updated_phone' : 'invalid_phone'),
             'message_validation' => $invalidMessage,
             'phone' => $chat->phone
-        ], $message);
+        ];
+
+        if (isset($payload['type'])) {
+            $updatePayload['phone_type'] = $payload['type'];
+        }
+
+        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, $updatePayload, $message);
 
         echo json_encode(['success' => true]);
 
@@ -64,13 +70,24 @@ try {
         // For node js to update main attribute
         erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.update_main_attr', array('chat' => & $chat));
 
+        // Payload
+        erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.update_cloudtalk_phone', array('chat' => & $chat, 'payload' => $payload));
+
     } else if ($Params['user_parameters_unordered']['mode'] == 'cancelphone') {
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, ['status' => 'invite', 'status_sub' => 'pending_update'], $message);
         echo json_encode(['success' => true]);
         $chat->operation_admin = "lhinst.updateMessageRowAdmin({$chat->id},{$message->id});\n";
         $chat->updateThis(['update' => ['operation_admin']]);
     } else if ($Params['user_parameters_unordered']['mode'] == 'editphone') {
-        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, ['status' => 'updatephone', 'status_sub' => 'pending_update'], $message);
+
+        $payload = json_decode(file_get_contents('php://input'),true);
+        $updatePayload = ['status' => 'updatephone', 'status_sub' => 'pending_update'];
+
+        if (isset($payload['type'])) {
+            $updatePayload['phone_type'] = $payload['type'];
+        }
+
+        \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($message->id, $updatePayload, $message);
         echo json_encode(['status' => 'updatephone']);
         $chat->operation_admin = "lhinst.updateMessageRowAdmin({$chat->id},{$message->id});\n";
         $chat->updateThis(['update' => ['operation_admin']]);

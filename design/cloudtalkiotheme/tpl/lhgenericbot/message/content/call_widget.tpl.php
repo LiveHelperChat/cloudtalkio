@@ -3,7 +3,7 @@
 <p class="text-center mb-2"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Start a call with an agent')?></p>
 <p class="text-center text-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','No charges or software to install')?></p>
 <?php else : ?>
-<h6 class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Update your phone number')?></h6>
+<h6 class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Please update your phone number')?></h6>
 <?php endif; ?>
 
 <?php if (($metaMessage['status'] == 'updatephone') || (isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone')) : ?>
@@ -14,7 +14,7 @@
         <img data-ignore-load id="img-country-svg-<?php echo $msg['id']?>" src="" style="display: none" />
     </div>
     <div class="col-10">
-        <input <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>disabled="disabled"<?php endif;?> data-phone-default="<?php echo htmlspecialchars($chat->phone)?>" data-country-default="<?php echo strtoupper($chat->country_code)?>" type="text" id="international-phone-number-<?php echo $msg['id']?>-val" placeholder="+" class="form-control form-control-sm<?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'invalid_phone') : ?> is-invalid<?php elseif (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?> is-valid<?php endif;?>">
+        <input <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>disabled="disabled"<?php endif;?> data-phone-default="<?php include(erLhcoreClassDesign::designtpl('lhgenericbot/message/content/default_phone_edit.tpl.php'));?>" data-country-default="<?php echo strtoupper($chat->country_code)?>" type="text" id="international-phone-number-<?php echo $msg['id']?>-val" placeholder="+" class="form-control form-control-sm<?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'invalid_phone') : ?> is-invalid<?php elseif (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?> is-valid<?php endif;?>">
         <div class="valid-feedback fs12" data-default="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ready to update!')?>">
             <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>
                 <b><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Phone updated!')?></b>

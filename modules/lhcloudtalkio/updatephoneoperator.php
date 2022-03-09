@@ -32,6 +32,8 @@ if ( erLhcoreClassChat::hasAccessToRead($chat) && $currentUser->hasAccessTo('lhc
             $chat->phone = $form->UserPhone;
         }
 
+        erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.validate_update_operator_phone', array('errors' => & $Errors, 'chat' => & $chat, 'params' => $Params));
+
         if (count($Errors) == 0) {
 
             $chat->saveThis(array('update' => array('phone')));
