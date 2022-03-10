@@ -29,7 +29,7 @@ if ( erLhcoreClassChat::hasAccessToRead($chat) && $currentUser->hasAccessTo('lhc
         }
 
         if ($form->hasValidData( 'UserPhone' ) ) {
-            $chat->phone = $form->UserPhone;
+            $chat->phone = str_replace(' ','',$form->UserPhone);
         }
 
         erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.validate_update_operator_phone', array('errors' => & $Errors, 'chat' => & $chat, 'params' => $Params));
