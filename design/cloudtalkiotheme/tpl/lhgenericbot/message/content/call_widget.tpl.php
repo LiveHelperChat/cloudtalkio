@@ -14,7 +14,8 @@
         <img data-ignore-load id="img-country-svg-<?php echo $msg['id']?>" src="" style="display: none" />
     </div>
     <div class="col-10">
-        <input <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>disabled="disabled"<?php endif;?> data-phone-default="<?php include(erLhcoreClassDesign::designtpl('lhgenericbot/message/content/default_phone_edit.tpl.php'));?>" data-country-default="<?php echo strtoupper($chat->country_code)?>" type="text" id="international-phone-number-<?php echo $msg['id']?>-val" placeholder="+" class="form-control form-control-sm<?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'invalid_phone') : ?> is-invalid<?php elseif (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?> is-valid<?php endif;?>">
+        <input <?php if ((isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') || (isset($metaMessage['cancel_mode']) && $metaMessage['cancel_mode'] == true)) : ?>disabled="disabled"<?php endif;?> data-phone-default="<?php include(erLhcoreClassDesign::designtpl('lhgenericbot/message/content/default_phone_edit.tpl.php'));?>" data-country-default="<?php echo strtoupper($chat->country_code)?>" type="text" id="international-phone-number-<?php echo $msg['id']?>-val" placeholder="+" class="form-control form-control-sm<?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'invalid_phone') : ?> is-invalid<?php elseif (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?> is-valid<?php endif;?>">
+        <?php if (!(isset($metaMessage['cancel_mode']) && $metaMessage['cancel_mode'] == true)) : ?>
         <div class="valid-feedback fs12" data-default="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ready to update!')?>">
             <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>
                 <b><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Phone updated!')?></b>
@@ -29,6 +30,8 @@
                 <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Complete phone number.')?>
             <?php endif; ?>
         </div>
+        <?php endif; ?>
+
     </div>
 </div>
 
@@ -38,8 +41,7 @@
 
 <div class="row">
     <div class="col-10 offset-2">
-
-        <?php if (isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') : ?>
+        <?php if ((isset($metaMessage['status_sub']) && $metaMessage['status_sub'] == 'updated_phone') || (isset($metaMessage['cancel_mode']) && $metaMessage['cancel_mode'] == true)) : ?>
             <button data-no-change="true" data-bot-action="execute-js" data-bot-args='{"method":"update_phone","msg_id":"<?php echo $msg['id']?>"}' data-bot-extension="cloudtalk-call" onclick="lhinst.executeJS()" id="cloudtalk-msg-update-phone-<?php echo $msg['id']?>" class="btn btn-sm btn-secondary">
                 <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Edit phone')?>
             </button>
@@ -49,7 +51,7 @@
             </button>
         <?php endif; ?>
 
-        <?php if (!(isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone')) : ?>
+        <?php if (!(isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone') || (isset($metaMessage['mode']) && $metaMessage['mode'] == 'phone' && !(isset($metaMessage['cancel_mode']) && $metaMessage['cancel_mode'] == true))) : ?>
         <button type="button" id="cancel-phone-action-<?php echo $msg['id']?>" class="btn float-right btn-outline-secondary btn-sm" ><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Cancel')?></button>
         <?php endif; ?>
     </div>

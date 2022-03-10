@@ -49,6 +49,8 @@ CREATE TABLE `lhc_cloudtalkio_call` (
                                         KEY `call_uuid` (`call_uuid`),
                                         KEY `msg_id` (`msg_id`),
                                         KEY `contact_removed` (`contact_removed`),
+                                        KEY `phone` (`phone`),
+                                        KEY `email` (`email`),
                                         KEY `contact_id` (`contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
