@@ -76,18 +76,23 @@
         }
     }
 
+    function initListener(element)
+    {
+        var phoneInput = element.getElementsByClassName('phone-field')[0];
+        var intIcon = element.getElementsByClassName('PhoneInputCountryIconImg')[0];
+        var countryIcon = element.getElementsByClassName('img-country-svg')[0];
+        renderPhone(phoneInput, intIcon, countryIcon);
+
+        phoneInput.addEventListener('keyup', function() {
+            renderPhone(phoneInput, intIcon, countryIcon);
+        });
+    }
+
     function initEditPhone(chat_id)
     {
         var phones = document.getElementsByClassName('phone-edit-field-'+chat_id);
-
         for (var i = 0; i < phones.length; i++) {
-            var phoneInput = phones[i].getElementsByClassName('phone-field')[0];
-            var intIcon = phones[i].getElementsByClassName('PhoneInputCountryIconImg')[0];
-            var countryIcon = phones[i].getElementsByClassName('img-country-svg')[0];
-            renderPhone(phoneInput, intIcon, countryIcon);
-            phoneInput.addEventListener('keyup', function(){
-                renderPhone(phoneInput, intIcon, countryIcon);
-            });
+            initListener(phones[i]);
         }
     }
 
