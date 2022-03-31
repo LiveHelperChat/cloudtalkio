@@ -72,7 +72,7 @@ try {
         erLhcoreClassChatEventDispatcher::getInstance()->dispatch('chat.update_main_attr', array('chat' => & $chat));
 
         // Payload
-        erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.update_cloudtalk_phone', array('chat' => & $chat, 'payload' => $payload));
+        erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.update_cloudtalk_phone', array('chat' => & $chat, 'payload' => $updatePayload));
 
     } else if ($Params['user_parameters_unordered']['mode'] == 'cancelphone') {
 
