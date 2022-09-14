@@ -134,16 +134,14 @@ if ($filterParams['input_form']->ds == 1)
 
 $tpl->set('inputAppend',$append);
 
-$tpl->set('Result',['path' => array(
+$Result['path'] = array(
     array(
-        'url' => erLhcoreClassDesign::baseurl('elasticsearch/index'),
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('lhelasticsearch/module', 'Elastic Search')
+        'url' => erLhcoreClassDesign::baseurl('cloudtalkio/index'),
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'CloudTalk')
     ),
     array(
-        'url' => erLhcoreClassDesign::baseurl('elasticsearch/list'),
-        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('lhelasticsearch/list', 'Mails list')
+        'title' => erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Elastic Call History')
     )
-)]);
-
+);
 
 $Result['content'] = $tpl->fetch();

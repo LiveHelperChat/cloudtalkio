@@ -1,4 +1,4 @@
-<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Call history');?></h1>
+<h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Elastic Call History');?></h1>
 
 <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/parts/form_filter.tpl.php'));?>
 
