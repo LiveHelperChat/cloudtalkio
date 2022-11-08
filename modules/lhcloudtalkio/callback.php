@@ -133,24 +133,26 @@ try {
         $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'status_outcome', 'answered_at','user_id','cloudtalk_user_id']]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,['status' => 'answered', 'answered_at' => time()]);
 
-        // Turn off to agent auto assignment
-        if ($callOngoing->user_id > 0 && ($UserData = \erLhcoreClassModelUser::fetch($callOngoing->user_id)) instanceof \erLhcoreClassModelUser && $UserData->exclude_autoasign == 0) {
+        if (isset(erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign']) && erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign'] === true) {
+            // Turn off to agent auto assignment
+            if ($callOngoing->user_id > 0 && ($UserData = \erLhcoreClassModelUser::fetch($callOngoing->user_id)) instanceof \erLhcoreClassModelUser && $UserData->exclude_autoasign == 0) {
 
-            // Auto assignment was changed
-            // On call end we know we have to switch back
-            $callOngoing->exclude_autoasign = 1;
-            $callOngoing->updateThis(['update' => ['exclude_autoasign']]);
+                // Auto assignment was changed
+                // On call end we know we have to switch back
+                $callOngoing->exclude_autoasign = 1;
+                $callOngoing->updateThis(['update' => ['exclude_autoasign']]);
 
-            // Change main data
-            $UserData->exclude_autoasign = 1;
-            $UserData->updateThis(['update' => ['exclude_autoasign']]);
+                // Change main data
+                $UserData->exclude_autoasign = 1;
+                $UserData->updateThis(['update' => ['exclude_autoasign']]);
 
-            // Update auto exclude
-            $db = ezcDbInstance::get();
-            $stmt = $db->prepare('UPDATE lh_userdep SET exclude_autoasign = :exclude_autoasign WHERE user_id = :user_id');
-            $stmt->bindValue(':user_id', $UserData->id, PDO::PARAM_INT);
-            $stmt->bindValue(':exclude_autoasign', $UserData->exclude_autoasign, PDO::PARAM_INT);
-            $stmt->execute();
+                // Update auto exclude
+                $db = ezcDbInstance::get();
+                $stmt = $db->prepare('UPDATE lh_userdep SET exclude_autoasign = :exclude_autoasign WHERE user_id = :user_id');
+                $stmt->bindValue(':user_id', $UserData->id, PDO::PARAM_INT);
+                $stmt->bindValue(':exclude_autoasign', $UserData->exclude_autoasign, PDO::PARAM_INT);
+                $stmt->execute();
+            }
         }
 
         // Send CueCard
@@ -167,22 +169,25 @@ try {
         $callOngoing->recording_url = $data['recording_url'];
         $callOngoing->call_id = $data['call_id'];
 
-        // Restore back auto assign workflow
-        if ($callOngoing->exclude_autoasign == 1) {
-            $callOngoing->exclude_autoasign = 0;
-             if ($callOngoing->user_id > 0 && ($UserData = \erLhcoreClassModelUser::fetch($callOngoing->user_id)) instanceof \erLhcoreClassModelUser) {
-                // Change main data
-                $UserData->exclude_autoasign = 0;
-                $UserData->updateThis(['update' => ['exclude_autoasign']]);
+        if (isset(erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign']) && erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign'] === true) {
+            // Restore back auto assign workflow
+            if ($callOngoing->exclude_autoasign == 1) {
+                $callOngoing->exclude_autoasign = 0;
+                if ($callOngoing->user_id > 0 && ($UserData = \erLhcoreClassModelUser::fetch($callOngoing->user_id)) instanceof \erLhcoreClassModelUser) {
+                    // Change main data
+                    $UserData->exclude_autoasign = 0;
+                    $UserData->updateThis(['update' => ['exclude_autoasign']]);
 
-                // Update auto exclude
-                $db = ezcDbInstance::get();
-                $stmt = $db->prepare('UPDATE lh_userdep SET exclude_autoasign = :exclude_autoasign WHERE user_id = :user_id');
-                $stmt->bindValue(':user_id', $UserData->id, PDO::PARAM_INT);
-                $stmt->bindValue(':exclude_autoasign', $UserData->exclude_autoasign, PDO::PARAM_INT);
-                $stmt->execute();
+                    // Update auto exclude
+                    $db = ezcDbInstance::get();
+                    $stmt = $db->prepare('UPDATE lh_userdep SET exclude_autoasign = :exclude_autoasign WHERE user_id = :user_id');
+                    $stmt->bindValue(':user_id', $UserData->id, PDO::PARAM_INT);
+                    $stmt->bindValue(':exclude_autoasign', $UserData->exclude_autoasign, PDO::PARAM_INT);
+                    $stmt->execute();
+                }
             }
         }
+
 
         $callOngoing->updateThis(['update' => [
             'waiting_time',
