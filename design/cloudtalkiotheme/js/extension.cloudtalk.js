@@ -2,9 +2,11 @@
 
     function chatLoaded(chat_id) {
         $('#chat-cloudtalk-invitation-btn-'+chat_id+',#chat-cloudtalk-invitation-btn-right-'+chat_id+',#main-user-info-tab-'+chat_id+' .invite-call-action-'+chat_id).click(function(event){
-            event.preventDefault();
-            event.stopPropagation();
-            lhinst.addmsgadmin(chat_id,'!cloudtalk --silent --arg ' + $(this).attr('data-phone'));
+            if (!$(this).attr('data-trans') || confirm($(this).attr('data-trans'))) {
+                event.preventDefault();
+                event.stopPropagation();
+                lhinst.addmsgadmin(chat_id,'!cloudtalk --silent --arg ' + $(this).attr('data-phone'));
+            }
         });
 
         $('#chat-cloudtalk-updatenumber-btn-right-'+chat_id).click(function(event){
