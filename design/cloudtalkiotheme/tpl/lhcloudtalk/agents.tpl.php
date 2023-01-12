@@ -18,7 +18,7 @@
                     <?php echo htmlspecialchars($item->firstname)?> <?php echo htmlspecialchars($item->lastname)?>
                 </td>
                 <td>
-                    <span class="badge <?php if ($item->availability_status == 'offline') : ?>badge-danger<?php elseif ($item->availability_status == 'idle') : ?> badge-warning<?php else : ?>badge-success<?php endif;?>">
+                    <span class="badge <?php if ($item->availability_status == 'offline') : ?>bg-danger<?php elseif ($item->availability_status == 'idle') : ?> badge-warning<?php else : ?>bg-success<?php endif;?>">
                         <?php echo htmlspecialchars($item->availability_status)?>
                     </span>
                 </td>
@@ -26,7 +26,7 @@
                     <?php echo htmlspecialchars($item->email)?>
                 </td>
                 <td>
-                    <span class="badge badge-secondary" title="<?php echo htmlspecialchars(implode(', ',$item->associated_numbers))?>"> <?php echo erLhcoreClassDesign::shrt(implode(', ',$item->associated_numbers),20,'...',30,ENT_QUOTES)?> </span>
+                    <span class="badge bg-secondary" title="<?php echo htmlspecialchars(implode(', ',$item->associated_numbers))?>"> <?php echo erLhcoreClassDesign::shrt(implode(', ',$item->associated_numbers),20,'...',30,ENT_QUOTES)?> </span>
                 </td>
             </tr>
         <?php endforeach; ?>

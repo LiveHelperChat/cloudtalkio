@@ -6,7 +6,7 @@
         <?php echo htmlspecialchars($item->user->username)?><?php echo htmlspecialchars($item->user->chat_nickname !== '' ? ' ('. $item->user->chat_nickname .')' : '')?>
     </a>
 <?php elseif ($item->user_id > 0) : ?>
-    <span class="badge badge-danger"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Operator not found')?> [<?php echo $item->user_id?>]</span>
+    <span class="badge bg-danger"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Operator not found')?> [<?php echo $item->user_id?>]</span>
 <?php else : ?>
-    <span class="badge badge-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','No operator assigned')?></span>
+    <span class="badge bg-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','No operator assigned')?></span>
 <?php endif; ?>

@@ -24,7 +24,7 @@
         <?php foreach ($items as $item) : ?>
             <tr>
                 <td nowrap="" title="<?php echo date(erLhcoreClassModule::$dateDateHourFormat,$item->created_at);?>">
-                    <?php echo htmlspecialchars($item->id) ?><span title="<?php if ($item->contact_removed == 1) : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact removed');?><?php else : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact exists in CloudTalk');?><?php endif; ?>" class="ml-1 material-icons <?php if ($item->contact_removed == 1) : ?>text-danger<?php else : ?>text-success<?php endif; ?>">contact_phone</span>
+                    <?php echo htmlspecialchars($item->id) ?><span title="<?php if ($item->contact_removed == 1) : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact removed');?><?php else : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact exists in CloudTalk');?><?php endif; ?>" class="ms-1 material-icons <?php if ($item->contact_removed == 1) : ?>text-danger<?php else : ?>text-success<?php endif; ?>">contact_phone</span>
                 </td>
                 <td>
                     <?php echo htmlspecialchars((string)$item->department)?>
@@ -59,11 +59,11 @@
                     <?php endif; ?>
 
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_ANSWERED) : ?>
-                        <span class="badge badge-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Answered')?></span>
+                        <span class="badge bg-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Answered')?></span>
                     <?php endif; ?>
 
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_ENDED) : ?>
-                        <span class="badge badge-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ended')?></span>
+                        <span class="badge bg-success"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ended')?></span>
                     <?php endif; ?>
 
                     <?php if ($item->exclude_autoasign == 1) : ?>
