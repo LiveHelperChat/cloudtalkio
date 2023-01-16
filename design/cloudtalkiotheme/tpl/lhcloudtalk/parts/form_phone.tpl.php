@@ -1,9 +1,9 @@
 <div class="form-group">
     <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/fbmessenger','Phone without + sign.');?>*</label>
     <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
+
             <span class="input-group-text" id="basic-addon1">+</span>
-        </div>
+        
         <input type="text" maxlength="100" class="form-control" name="phone" value="<?php echo htmlspecialchars($item->phone)?>" />
     </div>
 </div>
