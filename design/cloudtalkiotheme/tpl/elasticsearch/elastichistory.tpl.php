@@ -47,15 +47,15 @@
                 </td>
                 <td>
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_PENDING) : ?>
-                        <span class="badge badge-warning"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Pending')?></span>
+                        <span class="badge bg-warning"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Pending')?></span>
                     <?php endif; ?>
 
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_STARTED) : ?>
-                        <span class="badge badge-primary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Started')?></span>
+                        <span class="badge bg-primary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Started')?></span>
                     <?php endif; ?>
 
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_RINGING_AGENT) : ?>
-                        <span class="badge badge-primary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ringing agent')?></span>
+                        <span class="badge bg-primary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Ringing agent')?></span>
                     <?php endif; ?>
 
                     <?php if ($item->status == LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_ANSWERED) : ?>

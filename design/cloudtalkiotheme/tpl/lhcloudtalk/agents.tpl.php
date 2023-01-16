@@ -18,7 +18,7 @@
                     <?php echo htmlspecialchars($item->firstname)?> <?php echo htmlspecialchars($item->lastname)?>
                 </td>
                 <td>
-                    <span class="badge <?php if ($item->availability_status == 'offline') : ?>bg-danger<?php elseif ($item->availability_status == 'idle') : ?> badge-warning<?php else : ?>bg-success<?php endif;?>">
+                    <span class="badge <?php if ($item->availability_status == 'offline') : ?>bg-danger<?php elseif ($item->availability_status == 'idle') : ?> bg-warning<?php else : ?>bg-success<?php endif;?>">
                         <?php echo htmlspecialchars($item->availability_status)?>
                     </span>
                 </td>
