@@ -68,6 +68,8 @@ class CloudTalkLiveHelperChatValidator{
             )
         );
 
+        \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.list_export_columns',array('items' => & $chatArray));
+
         $now = gmdate("D, d M Y H:i:s");
         header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
         header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
@@ -106,7 +108,7 @@ class CloudTalkLiveHelperChatValidator{
                 $statusText = (($itemObject->status_outcome == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_OUTCOME_ANSWERED) ? \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'answered') : \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'not answered'));
             }
 
-            fputcsv($df, [
+            $itemData = [
                 $itemObject->id,
                 (string)$itemObject->department,
                 $itemObject->phone,
@@ -125,7 +127,11 @@ class CloudTalkLiveHelperChatValidator{
                 $itemObject->call_uuid,
                 $itemObject->recording_url,
                 $itemObject->chat_id,
-            ]);
+            ];
+
+            \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.list_export_item_data',array('item' => & $itemData, 'call' => $itemObject));
+
+            fputcsv($df, $itemData);
         }
 
         fclose($df);
