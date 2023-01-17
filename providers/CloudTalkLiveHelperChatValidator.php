@@ -98,7 +98,7 @@ class CloudTalkLiveHelperChatValidator{
         foreach ($chats as $item) {
             $itemObject = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::fetch($item->id);
 
-            $statusTextInbound = $itemObject->direction == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND ? \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'uutbound') : \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'inbound');
+            $statusTextInbound = $itemObject->direction == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND ? \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'outbound') : \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'inbound');
 
             if ($itemObject->status_call == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_PENDING_CALL_ID) {
                 $statusText = (\erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Pending call history'));
