@@ -17,7 +17,17 @@ if (isset($filterParams['filter']['filterin']['lh_chat.dep_id'])) {
     unset($filterParams['filter']['filterin']['lh_chat.dep_id']);
 }
 
-$append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form']);
+$append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form'], false, ['form_action']);
+
+
+if (isset($Params['user_parameters_unordered']['export']) && $Params['user_parameters_unordered']['export'] == 1) {
+    session_write_close();
+    $ignoreFields = (new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall)->getState();
+    unset($ignoreFields['id']);
+    $ignoreFields = array_keys($ignoreFields);
+    \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatValidator::callListExport(\LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getList(array_merge($filterParams['filter'], array('limit' => 100000, 'offset' => 0, 'ignore_fields' => $ignoreFields))));
+    exit;
+}
 
 $rowsNumber = null;
 

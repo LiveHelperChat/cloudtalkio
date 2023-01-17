@@ -104,7 +104,33 @@ if ($filterParams['input_form']->sortby == 'idasc') {
     $sort = array('_id' => array('order' => 'desc'));
 }
 
-$append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form']);
+$append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form'], false, ['form_action']);
+
+if (isset($Params['user_parameters_unordered']['export']) && $Params['user_parameters_unordered']['export'] == 1) {
+    session_write_close();
+    $ignoreFields = (new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall)->getState();
+    unset($ignoreFields['id']);
+    $ignoreFields = array_keys($ignoreFields);
+
+    $filterSQL = [];
+
+    $chats = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoESCall::getList(array(
+        'offset' => 0,
+        'limit' => 9000,
+        'body' => array_merge(array(
+            'sort' => $sort
+        ), $sparams['body'])
+    ),
+    array('date_index' => $dateFilter));
+
+    $chatIDs = [];
+    foreach ($chats as $chatID) {
+        $filterSQL['filterin']['id'][] = $chatID->id;
+    }
+
+    \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatValidator::callListExport(\LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getList(array_merge($filterSQL, array('limit' => 100000, 'offset' => 0, 'ignore_fields' => $ignoreFields))));
+    exit;
+}
 
 if ($filterParams['input_form']->ds == 1)
 {

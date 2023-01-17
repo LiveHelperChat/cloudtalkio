@@ -182,6 +182,11 @@
     </div>
     <div class="btn-group" role="group" aria-label="...">
         <input type="submit" name="doSearch" class="btn btn-sm btn-secondary" value="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Search');?>" />
+
+        <?php if (isset($pages) && $pages->items_total > 0) : ?>
+                <a href="<?php echo $pages->serverURL?>/(export)/1" class="btn btn-outline-secondary btn-sm"><span class="material-icons">file_download</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Export')?> (<?php echo $pages->items_total?> <?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','calls');?>)</a>
+        <?php endif; ?>
+
         <a href="<?php echo $input->form_action?>" class="btn btn-sm btn-outline-secondary"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Reset');?></a>
     </div>
 </form>

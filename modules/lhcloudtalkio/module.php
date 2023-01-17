@@ -18,6 +18,7 @@ $ViewList['elastichistory'] = array(
     'params' => array(),
     'uparams' => array(
         'phone',
+        'ds',
         'status',
         'department_ids',
         'department_group_ids',
@@ -33,7 +34,8 @@ $ViewList['elastichistory'] = array(
         'sortby',
         'direction',
         'status_outcome',
-        'chat_call'
+        'chat_call',
+        'export'
     ),
     'functions' => array(
         'use_operator'
@@ -65,7 +67,8 @@ $ViewList['history'] = array(
         'sortby',
         'direction',
         'status_outcome',
-        'chat_call'
+        'chat_call',
+        'export'
     ),
     'functions' => array(
         'use_operator'
