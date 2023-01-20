@@ -43,6 +43,7 @@ CREATE TABLE `lhc_cloudtalkio_call` (
                                         `msg_id` bigint(20) unsigned NOT NULL DEFAULT 0,
                                         `answered_at` bigint(20) unsigned NOT NULL DEFAULT 0,
                                         `dep_id` bigint(20) unsigned NOT NULL,
+                                        `phone_from_id` bigint(20) unsigned NOT NULL DEFAULT 0,
                                         PRIMARY KEY (`id`),
                                         KEY `call_id` (`call_id`),
                                         KEY `cloudtalk_user_id` (`cloudtalk_user_id`),
@@ -51,6 +52,7 @@ CREATE TABLE `lhc_cloudtalkio_call` (
                                         KEY `contact_removed` (`contact_removed`),
                                         KEY `phone` (`phone`),
                                         KEY `email` (`email`),
+                                        KEY `phone_from_id` (`phone_from_id`),
                                         KEY `contact_id` (`contact_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

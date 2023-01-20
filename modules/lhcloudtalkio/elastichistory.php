@@ -81,6 +81,11 @@ if (isset($filterParams['input']->department_ids) && is_array($filterParams['inp
     $sparams['body']['query']['bool']['must'][]['terms']['dep_id'] = $filterParams['input']->department_ids;
 }
 
+if (isset($filterParams['input']->phone_from_ids) && is_array($filterParams['input']->phone_from_ids) && !empty($filterParams['input']->phone_from_ids)) {
+    erLhcoreClassChat::validateFilterIn($filterParams['input']->phone_from_ids);
+    $sparams['body']['query']['bool']['must'][]['terms']['phone_from_id'] = $filterParams['input']->phone_from_ids;
+}
+
 if (isset($filterParams['input']->user_ids) && is_array($filterParams['input']->user_ids) && !empty($filterParams['input']->user_ids)) {
     erLhcoreClassChat::validateFilterIn($filterParams['input']->user_ids);
     $sparams['body']['query']['bool']['must'][]['terms']['user_id'] = $filterParams['input']->user_ids;

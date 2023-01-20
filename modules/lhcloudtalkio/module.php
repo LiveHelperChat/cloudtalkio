@@ -35,7 +35,8 @@ $ViewList['elastichistory'] = array(
         'direction',
         'status_outcome',
         'chat_call',
-        'export'
+        'export',
+        'phone_from_ids'
     ),
     'functions' => array(
         'use_operator'
@@ -45,6 +46,7 @@ $ViewList['elastichistory'] = array(
         'department_group_ids',
         'user_ids',
         'group_ids',
+        'phone_from_ids',
     )
 );
 
@@ -68,7 +70,8 @@ $ViewList['history'] = array(
         'direction',
         'status_outcome',
         'chat_call',
-        'export'
+        'export',
+        'phone_from_ids'
     ),
     'functions' => array(
         'use_operator'
@@ -78,6 +81,7 @@ $ViewList['history'] = array(
         'department_group_ids',
         'user_ids',
         'group_ids',
+        'phone_from_ids',
     )
 );
 

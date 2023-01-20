@@ -38,6 +38,18 @@ $fieldsSearch['department_ids'] = array (
     )
 );
 
+$fieldsSearch['phone_from_ids'] = array (
+    'type' => 'text',
+    'trans' => 'Phone from numbers',
+    'required' => false,
+    'valid_if_filled' => false,
+    'filter_type' => 'filterin',
+    'filter_table_field' => 'phone_from_id',
+    'validation_definition' => new ezcInputFormDefinitionElement(
+        ezcInputFormDefinitionElement::OPTIONAL, 'int', array( 'min_range' => 0), FILTER_REQUIRE_ARRAY
+    )
+);
+
 $fieldsSearch['department_group_ids'] = array (
     'type' => 'text',
     'trans' => 'Group',

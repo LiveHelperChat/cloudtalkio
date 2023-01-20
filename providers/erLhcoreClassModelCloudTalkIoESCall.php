@@ -51,6 +51,13 @@ class erLhcoreClassModelCloudTalkIoESCall
     {
         switch ($var) {
 
+            case 'phone_from':
+                $this->phone_from = null;
+                if ($this->phone_from_id > 0) {
+                    $this->phone_from = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::fetch($this->phone_from_id);
+                }
+                return $this->phone_from;
+
             case 'department':
                 $this->department = false;
                 if ($this->dep_id > 0) {

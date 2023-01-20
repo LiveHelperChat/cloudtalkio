@@ -31,6 +31,7 @@ foreach ([
              'direction',
              'msg_id',
              'exclude_autoasign',
+             'phone_from_id',
          ] as $posAttr) {
     $def->properties[$posAttr] = new ezcPersistentObjectProperty();
     $def->properties[$posAttr]->columnName   = $posAttr;

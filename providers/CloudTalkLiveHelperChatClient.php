@@ -217,6 +217,7 @@ class CloudTalkLiveHelperChatClient {
         $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
         $call->call_uuid = $data['call_uuid'];
         $call->dep_id = $phoneNumberInternal->dep_id;
+        $call->phone_from_id = $phoneNumberInternal->id;
         $call->saveThis();
 
         $chat = new \erLhcoreClassModelChat();
@@ -266,6 +267,7 @@ class CloudTalkLiveHelperChatClient {
         $call = new \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall();
         $call->call_uuid = $data['call_uuid'];
         $call->dep_id = $phoneNumberInternal->dep_id;
+        $call->phone_from_id = $phoneNumberInternal->id;
         $call->saveThis();
 
         $chat = new \erLhcoreClassModelChat();

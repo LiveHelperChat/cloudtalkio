@@ -95,6 +95,13 @@ try {
         }
     }
 
+    if ($callOngoing->phone_from_id == 0 && isset($data['internal_number'])) {
+        $phoneNumberInternal = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::findOne(['filter' => ['phone' => $data['internal_number']]]);
+        if (is_object($phoneNumberInternal)) {
+            $callOngoing->phone_from_id = $phoneNumberInternal->id;
+        }
+    }
+
     $callOngoing->call_uuid = $data['call_uuid'];
 
     if ($callOngoing->cloudtalk_user_id == 0 && is_numeric($data['agent_id']) && $data['agent_id'] > 0) {
@@ -117,20 +124,20 @@ try {
         }
 
         $callOngoing->direction = $data['direction'] == 'outgoing' ? erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND : erLhcoreClassModelCloudTalkIoCall::DIRECTION_INCOMMING;
-        $callOngoing->updateThis(['update' => ['status','call_uuid','direction','cloudtalk_user_id','user_id']]);
+        $callOngoing->updateThis(['update' => ['status','call_uuid','direction','cloudtalk_user_id','user_id','phone_from_id']]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,'call_started');
     }
 
     if ($data['action'] == 'ringing_on_agent') {
         $callOngoing->status = erLhcoreClassModelCloudTalkIoCall::STATUS_RINGING_AGENT;
-        $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'cloudtalk_user_id','user_id']]);
+        $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'cloudtalk_user_id','user_id','phone_from_id']]);
     }
 
     if ($data['action'] == 'answered') {
         $callOngoing->status = erLhcoreClassModelCloudTalkIoCall::STATUS_ANSWERED;
         $callOngoing->status_outcome = erLhcoreClassModelCloudTalkIoCall::STATUS_OUTCOME_ANSWERED;
         $callOngoing->answered_at = time();
-        $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'status_outcome', 'answered_at','user_id','cloudtalk_user_id']]);
+        $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'status_outcome', 'answered_at','user_id','cloudtalk_user_id','phone_from_id']]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,['status' => 'answered', 'answered_at' => time()]);
 
         if (isset(erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign']) && erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign'] === true) {
@@ -200,7 +207,8 @@ try {
             'call_id',
             'user_id',
             'cloudtalk_user_id',
-            'exclude_autoasign'
+            'exclude_autoasign',
+            'phone_from_id'
         ]]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,['status' => 'ended', 'ended_at' => time()]);
     }

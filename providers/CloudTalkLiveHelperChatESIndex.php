@@ -26,6 +26,7 @@ class CloudTalkLiveHelperChatESIndex{
         $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['user_id'] = array('type' => 'long');
         $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['chat_id'] = array('type' => 'long');
         $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['call_id'] = array('type' => 'long');
+        $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['phone_from_id'] = array('type' => 'long');
         $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['contact_id'] = array('type' => 'long');
         $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['cloudtalk_user_id'] = array('type' => 'long');
         $params['structure'][(isset($params['index_new']) ? $params['index_new'] : 'chat')]['types']['lh_call']['status'] = array('type' => 'integer');
@@ -168,6 +169,7 @@ class CloudTalkLiveHelperChatESIndex{
             $esChat->cloudtalk_user_id = $item->cloudtalk_user_id;
             $esChat->user_id = $item->user_id;
             $esChat->call_id = $item->call_id;
+            $esChat->phone_from_id = $item->phone_from_id;
             $esChat->contact_id = $item->contact_id;
             $esChat->contact_removed = $item->contact_removed;
             $esChat->chat_id = $item->chat_id;

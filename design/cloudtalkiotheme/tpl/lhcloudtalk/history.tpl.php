@@ -26,7 +26,7 @@
                 <td nowrap="" title="<?php echo date(erLhcoreClassModule::$dateDateHourFormat,$item->created_at);?>">
                     <?php echo htmlspecialchars($item->id) ?><span title="<?php if ($item->contact_removed == 1) : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact removed');?><?php else : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact exists in CloudTalk');?><?php endif; ?>" class="ms-1 material-icons <?php if ($item->contact_removed == 1) : ?>text-danger<?php else : ?>text-success<?php endif; ?>">contact_phone</span>
                 </td>
-                <td>
+                <td title="<?php echo htmlspecialchars((string)$item->phone_from)?>">
                     <?php echo htmlspecialchars((string)$item->department)?>
                 </td>
                 <td>

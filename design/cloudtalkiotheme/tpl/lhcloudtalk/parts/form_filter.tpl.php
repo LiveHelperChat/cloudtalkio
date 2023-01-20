@@ -1,15 +1,13 @@
 <form action="<?php echo $input->form_action?>" method="get" class="mb-2" ng-non-bindable>
     <input type="hidden" name="doSearch" value="1">
     <input type="hidden" name="ds" value="1">
-    <div class="row">
+    <div class="row pb-2">
 
         <div class="col-md-2">
             <div class="form-group">
-                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone');?></label>
+                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone (To)');?></label>
                 <div class="input-group input-group-sm mb-3">
-
-                        <span class="input-group-text" id="basic-addon1">+</span>
-
+                    <span class="input-group-text" id="basic-addon1">+</span>
                     <input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars((string)$input->phone)?>" aria-label="Username" aria-describedby="basic-addon1">
                 </div>
             </div>
@@ -176,9 +174,24 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-2">
+            <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone (From)');?></label>
+            <?php echo erLhcoreClassRenderHelper::renderMultiDropdown( array (
+                'input_name'     => 'phone_from_ids[]',
+                'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone number'),
+                'selected_id'    => $input->phone_from_ids,
+                'css_class'      => 'form-control',
+                'display_name'   => 'phone',
+                'list_function_params' => ['limit' => false],
+                'list_function'  => '\LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::getList'
+            )); ?>
+        </div>
+
         <div class="col-md-2">
             <label><input type="checkbox" name="chat_call" <?php if ($input->chat_call === true) : ?>checked="checked"<?php endif;?> value="on">&nbsp;<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Chat based call');?></label>
         </div>
+
     </div>
     <div class="btn-group" role="group" aria-label="...">
         <input type="submit" name="doSearch" class="btn btn-sm btn-secondary" value="<?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Search');?>" />

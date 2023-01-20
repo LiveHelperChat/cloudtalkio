@@ -19,6 +19,7 @@ class erLhcoreClassModelCloudTalkIoCall
         return array(
             'id' => $this->id,
             'cloudtalk_user_id' => $this->cloudtalk_user_id,
+            'phone_from_id' => $this->phone_from_id,
             'user_id' => $this->user_id,
             'call_id' => $this->call_id,
             'contact_id' => $this->contact_id,
@@ -80,6 +81,13 @@ class erLhcoreClassModelCloudTalkIoCall
                     'cloudtalk_user_id' => $this->cloudtalk_user_id
                 ]]);
                 return $this->cloudtalk_user;
+
+            case 'phone_from':
+                $this->phone_from = null;
+                if ($this->phone_from_id > 0) {
+                    $this->phone_from = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::fetch($this->phone_from_id);
+                }
+                return $this->phone_from;
 
             case 'department':
                 $this->department = null;
@@ -145,6 +153,7 @@ class erLhcoreClassModelCloudTalkIoCall
     public $cloudtalk_user_id = 0;
     public $user_id = 0;
     public $chat_id = 0;
+    public $phone_from_id = 0;
     public $date_from = 0;
     public $date_to = 0;
     public $contact_id = 0;
