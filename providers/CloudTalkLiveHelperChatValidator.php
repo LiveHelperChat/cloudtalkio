@@ -112,8 +112,8 @@ class CloudTalkLiveHelperChatValidator{
             $itemData = [
                 $itemObject->id,
                 (string)$itemObject->department,
-                (string)$itemObject->phone_from,
-                $itemObject->phone,
+                ($itemObject->direction == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND ? (string)$itemObject->phone_from : $itemObject->phone),
+                ($itemObject->direction == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND ? $itemObject->phone : (string)$itemObject->phone_from),
                 $itemObject->nick,
                 $itemObject->email,
                 (string)$itemObject->user,
