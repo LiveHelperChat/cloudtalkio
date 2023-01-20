@@ -26,7 +26,7 @@ class erLhcoreClassModelCloudTalkIoPhoneNumber
 
     public function __toString()
     {
-        return $this->phone;
+        return (string)$this->phone;
     }
 
     public function __get($var)
