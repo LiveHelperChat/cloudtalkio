@@ -37,6 +37,7 @@ class erLhcoreClassModelCloudTalkIoESCall
             'call_variables' => $this->call_variables,
             'recording_url' => $this->recording_url,
             'hour' => $this->hour,
+            'phone_from_id' => $this->phone_from_id,
         );
 
         \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('elasticsearch.getstate_call', array(
@@ -133,6 +134,7 @@ class erLhcoreClassModelCloudTalkIoESCall
     public $msg_id = null;
     public $call_variables = null;
     public $recording_url = null;
+    public $phone_from_id = null;
 
     // Dynamic attributes
     public $subject_id = null;
