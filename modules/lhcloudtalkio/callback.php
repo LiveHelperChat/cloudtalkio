@@ -173,7 +173,11 @@ try {
         $callOngoing->waiting_time = $data['waiting_time'];
         $callOngoing->talking_time = $data['talking_time'];
         $callOngoing->wrapup_time = $data['wrapup_time'];
-        $callOngoing->recording_url = $data['recording_url'];
+
+        if (isset($data['recording_url'])) {
+            $callOngoing->recording_url = (string)$data['recording_url'];
+        }
+
         $callOngoing->call_id = $data['call_id'];
 
         if (isset(erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign']) && erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['control_auto_assign'] === true) {
