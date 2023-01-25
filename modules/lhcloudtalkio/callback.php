@@ -139,7 +139,8 @@ try {
 
     if ($data['action'] == 'ringing_on_agent') {
         $callOngoing->status = erLhcoreClassModelCloudTalkIoCall::STATUS_RINGING_AGENT;
-        $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'cloudtalk_user_id','user_id','phone_from_id']]);
+        $callOngoing->direction = $data['direction'] == 'outgoing' ? erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND : erLhcoreClassModelCloudTalkIoCall::DIRECTION_INCOMMING;
+        $callOngoing->updateThis(['update' => ['status', 'call_uuid', 'cloudtalk_user_id','user_id','phone_from_id','direction']]);
     }
 
     if ($data['action'] == 'answered') {
