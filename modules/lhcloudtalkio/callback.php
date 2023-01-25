@@ -184,6 +184,7 @@ try {
         $callOngoing->waiting_time = $data['waiting_time'];
         $callOngoing->talking_time = $data['talking_time'];
         $callOngoing->wrapup_time = $data['wrapup_time'];
+        $callOngoing->direction = $data['direction'] == 'outgoing' ? erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND : erLhcoreClassModelCloudTalkIoCall::DIRECTION_INCOMMING;
 
         if (isset($data['recording_url'])) {
             $callOngoing->recording_url = (string)$data['recording_url'];
@@ -223,7 +224,8 @@ try {
             'user_id',
             'cloudtalk_user_id',
             'exclude_autoasign',
-            'phone_from_id'
+            'phone_from_id',
+            'direction'
         ]]);
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::setMessageCallStatus($callOngoing->msg_id,['status' => 'ended', 'ended_at' => time()]);
     }
