@@ -99,11 +99,14 @@ try {
     $logArray = $callOngoing->log_array;
     unset($data['lhc_key']);
     $data['log_ts'] = date('Y-m-d H:i:s');
-    $logArray[] = $data;
+
+    array_unshift ($logArray, $data);
+    $logArray = array_slice($logArray,0,7);
+
     $callOngoing->log_array = $logArray;
     $callOngoing->log = json_encode($logArray);
-    $callOngoing->updateThis(['update' => ['log']]);
 
+    $callOngoing->updateThis(['update' => ['log']]);
 
     if ($callOngoing->phone_from_id == 0 && isset($data['internal_number'])) {
         $phoneNumberInternal = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::findOne(['filter' => ['phone' => $data['internal_number']]]);
