@@ -97,6 +97,7 @@ try {
 
     // Store log within a call
     $logArray = $callOngoing->log_array;
+    unset($data['lhc_key']);
     $data['log_ts'] = date('Y-m-d H:i:s');
     $logArray[] = $data;
     $callOngoing->log_array = $logArray;
