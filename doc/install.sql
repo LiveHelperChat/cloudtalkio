@@ -34,6 +34,7 @@ CREATE TABLE `lhc_cloudtalkio_call` (
                                         `talking_time` int(11) unsigned NOT NULL,
                                         `wrapup_time` int(11) unsigned NOT NULL,
                                         `call_variables` text COLLATE utf8mb4_unicode_ci NOT NULL,
+                                        `log` text COLLATE utf8mb4_unicode_ci NOT NULL,
                                         `nick` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
                                         `call_uuid` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
                                         `recording_url` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,

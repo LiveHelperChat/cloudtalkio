@@ -54,6 +54,7 @@ $ViewList['history'] = array(
     'params' => array(),
     'uparams' => array(
         'phone',
+        'call_external_id',
         'status',
         'department_ids',
         'department_group_ids',
@@ -91,6 +92,11 @@ $ViewList['agentsnative'] = array(
 );
 
 $ViewList['assignaction'] = array(
+    'params' => array('id'),
+    'functions' => array('use_operator'),
+);
+
+$ViewList['rawjson'] = array(
     'params' => array('id'),
     'functions' => array('use_operator'),
 );

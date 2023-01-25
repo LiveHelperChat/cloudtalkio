@@ -45,7 +45,8 @@ class erLhcoreClassModelCloudTalkIoCall
             'exclude_autoasign' => $this->exclude_autoasign,
             'email' => $this->email,
             'call_variables' => $this->call_variables,
-            'nick' => $this->nick
+            'nick' => $this->nick,
+            'log' => $this->log
         );
     }
 
@@ -101,17 +102,19 @@ class erLhcoreClassModelCloudTalkIoCall
                 return $this->department;
 
             case 'call_variables_array':
-                if (!empty($this->call_variables)) {
-                    $jsonData = json_decode($this->call_variables,true);
+            case 'log_array':
+                $attr = str_replace('_array','',$var);
+                if (!empty($this->{$attr})) {
+                    $jsonData = json_decode($this->{$attr},true);
                     if ($jsonData !== null) {
-                        $this->call_variables_array = $jsonData;
+                        $this->{$var} = $jsonData;
                     } else {
-                        $this->call_variables_array = $this->call_variables;
+                        $this->{$var} = array();
                     }
                 } else {
-                    $this->call_variables_array = array();
+                    $this->{$var} = array();
                 }
-                return $this->call_variables_array;
+                return $this->{$var};
 
             default:
                 ;
@@ -180,6 +183,7 @@ class erLhcoreClassModelCloudTalkIoCall
     public $email = '';
     public $call_variables = '';
     public $nick = '';
+    public $log = '';
 }
 
 ?>

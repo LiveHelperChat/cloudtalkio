@@ -13,6 +13,13 @@
             </div>
         </div>
 
+        <div class="col-md-2">
+            <div class="form-group">
+                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Call ID');?></label>
+                <input type="text" name="call_external_id" class="form-control form-control-sm" value="<?php echo htmlspecialchars((string)$input->call_external_id)?>" >
+            </div>
+        </div>
+
         <div class="col-2">
             <div class="form-group">
                 <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Agent');?></label>

@@ -95,6 +95,15 @@ try {
         }
     }
 
+    // Store log within a call
+    $logArray = $callOngoing->log_array;
+    $data['log_ts'] = date('Y-m-d H:i:s');
+    $logArray[] = $data;
+    $callOngoing->log_array = $logArray;
+    $callOngoing->log = json_encode($logArray);
+    $callOngoing->updateThis(['update' => ['log']]);
+
+
     if ($callOngoing->phone_from_id == 0 && isset($data['internal_number'])) {
         $phoneNumberInternal = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoPhoneNumber::findOne(['filter' => ['phone' => $data['internal_number']]]);
         if (is_object($phoneNumberInternal)) {

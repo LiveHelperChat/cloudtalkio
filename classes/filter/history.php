@@ -26,6 +26,18 @@ $fieldsSearch['call_id'] = array (
     )
 );
 
+$fieldsSearch['call_external_id'] = array (
+    'type' => 'text',
+    'trans' => 'Name',
+    'required' => false,
+    'valid_if_filled' => false,
+    'filter_type' => 'filter',
+    'filter_table_field' => 'call_id',
+    'validation_definition' => new ezcInputFormDefinitionElement (
+        ezcInputFormDefinitionElement::OPTIONAL, 'string'
+    )
+);
+
 $fieldsSearch['department_ids'] = array (
     'type' => 'text',
     'trans' => 'Department',
