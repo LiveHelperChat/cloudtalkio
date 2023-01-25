@@ -43,7 +43,7 @@ try {
     if (!isset($data['contact_id']) || $data['contact_id'] == null) {
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::contactByIncommingCall($data);
     } elseif ( // Contact exists but call, does not so create a call
-        ($data['action'] == 'call_started' || $data['action'] == 'ringing_on_agent') &&
+        ($data['action'] == 'call_started' || $data['action'] == 'ringing_on_agent' || $data['action'] == 'ended') &&
         $data['direction'] == 'incoming' &&
         erLhcoreClassModelCloudTalkIoCall::getCount(['filter' => ['call_uuid' => $data['call_uuid']]]) == 0) {
         \LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient::callByIncommingCall($data);
