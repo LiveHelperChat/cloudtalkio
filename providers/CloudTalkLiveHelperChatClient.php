@@ -303,7 +303,9 @@ class CloudTalkLiveHelperChatClient {
         // For extensions to listen for event and prefill details
         \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.contact_details_by_phone_after',array('call' => $call, 'data' => & $data, 'chat' => & $chat));
 
-        self::createContactByChat($chat, $call->contact_id);
+        if ($data['action'] != 'ended') {
+            self::createContactByChat($chat, $call->contact_id);
+        }
     }
 
     public static function createContactByChat($chat, $contactId = null) {
