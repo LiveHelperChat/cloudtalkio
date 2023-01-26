@@ -49,8 +49,8 @@ class CloudTalkLiveHelperChatValidator{
             array(
                 'ID',
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Department'),
-                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Phone (From)'),
-                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Phone (To)'),
+                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Via Call Number'),
+                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Call Number'),
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Nick'),
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'E-mail'),
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Chat agent'),
@@ -112,8 +112,8 @@ class CloudTalkLiveHelperChatValidator{
             $itemData = [
                 $itemObject->id,
                 (string)$itemObject->department,
-                ($itemObject->direction == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND ? (string)$itemObject->phone_from : $itemObject->phone),
-                ($itemObject->direction == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::DIRECTION_OUTBOUND ? $itemObject->phone : (string)$itemObject->phone_from),
+                (string)$itemObject->phone_from,
+                $itemObject->phone,
                 $itemObject->nick,
                 $itemObject->email,
                 (string)$itemObject->user,

@@ -5,7 +5,7 @@
 
         <div class="col-md-2">
             <div class="form-group">
-                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone (To)');?></label>
+                <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Contact Number');?></label>
                 <div class="input-group input-group-sm mb-3">
                     <span class="input-group-text" id="basic-addon1">+</span>
                     <input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars((string)$input->phone)?>" aria-label="Username" aria-describedby="basic-addon1">
@@ -183,7 +183,7 @@
         </div>
 
         <div class="col-md-2">
-            <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone (From)');?></label>
+            <label><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Via Call Number');?></label>
             <?php echo erLhcoreClassRenderHelper::renderMultiDropdown( array (
                 'input_name'     => 'phone_from_ids[]',
                 'optional_field' => erTranslationClassLhTranslation::getInstance()->getTranslation('chat/lists/search_panel','Phone number'),
