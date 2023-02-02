@@ -48,6 +48,9 @@ class CloudTalkLiveHelperChatValidator{
         $chatArray = array(
             array(
                 'ID',
+                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Created At'),
+                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Updated At'),
+                \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Answered At'),
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Department'),
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Via Call Number'),
                 \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'Call Number'),
@@ -111,6 +114,9 @@ class CloudTalkLiveHelperChatValidator{
 
             $itemData = [
                 $itemObject->id,
+                date('Y-m-d H:i:s',$itemObject->created_at),
+                date('Y-m-d H:i:s',$itemObject->updated_at),
+                ($itemObject->answered_at > 0 ? date('Y-m-d H:i:s',$itemObject->answered_at) : ''),
                 (string)$itemObject->department,
                 (string)$itemObject->phone_from,
                 $itemObject->phone,
