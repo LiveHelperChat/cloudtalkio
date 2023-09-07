@@ -18,6 +18,7 @@
  *
  * @package Requests
  */
+#[\AllowDynamicProperties]
 class Requests {
 	/**
 	 * POST method

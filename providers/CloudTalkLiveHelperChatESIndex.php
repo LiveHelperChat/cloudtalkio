@@ -1,7 +1,7 @@
 <?php
 
 namespace LiveHelperChatExtension\cloudtalkio\providers;
-
+#[\AllowDynamicProperties]
 class CloudTalkLiveHelperChatESIndex{
 
     public static function interactionsIndex($params)

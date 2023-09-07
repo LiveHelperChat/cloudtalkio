@@ -1,7 +1,7 @@
 <?php
 
 namespace LiveHelperChatExtension\cloudtalkio\providers;
-
+#[\AllowDynamicProperties]
 class erLhcoreClassModelCloudTalkIoAgentNative
 {
     use \erLhcoreClassDBTrait;

@@ -164,3 +164,5 @@ $FunctionList['use_admin'] = array('explain' => 'Allow operator to configure Clo
 $FunctionList['use_operator'] = array('explain' => 'Allow operator to use CloudTalk (invite to call)');
 $FunctionList['use_direct'] = array('explain' => 'Allow operator to use CloudTalk (direct call)');
 $FunctionList['use_phone'] = array('explain' => 'Allow operator to use CloudTalk (phone number)');
+$FunctionList['use_unhidden_phone'] = array('explain' => 'Allow operator to see full phone number');
+$FunctionList['edit_visitor_phone'] = array('explain' => 'Allow operator to edit visitor phone');

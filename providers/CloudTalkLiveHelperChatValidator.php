@@ -1,7 +1,7 @@
 <?php
 
 namespace LiveHelperChatExtension\cloudtalkio\providers;
-
+#[\AllowDynamicProperties]
 class CloudTalkLiveHelperChatValidator{
 
     public static function validatePhone($item) {

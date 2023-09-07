@@ -3,7 +3,7 @@
 namespace LiveHelperChatExtension\cloudtalkio\providers {
 
     require_once 'extension/cloudtalkio/providers/CloudTalk/CTApiClient.php';
-
+    #[\AllowDynamicProperties]
     class CloudTalkLiveHelperChat extends \CTApiClient{
 
         protected function getConstant($const){

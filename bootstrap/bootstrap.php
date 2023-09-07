@@ -1,5 +1,5 @@
 <?php
-
+#[\AllowDynamicProperties]
 class erLhcoreClassExtensionCloudtalkio {
 
     public function __construct() {

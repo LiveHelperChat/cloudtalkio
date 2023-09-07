@@ -12,7 +12,13 @@
         <p class="text-center"><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Waiting for visitor to start a call')?></p>
         <button type="button" onclick="ee.emitEvent('cloudtalk.cancel_call', [<?php echo $msg['id']?>]);" class="btn d-block w-100 btn-sm btn-warning">
             <span class="material-icons">phone_disabled</span><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Cancel an invitation')?>
-            <?php if (isset($metaMessage['phone'])) : ?><?php echo htmlspecialchars($metaMessage['phone'])?><?php endif;?>
+            <?php if (isset($metaMessage['phone'])) : ?>
+                <?php if (erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_unhidden_phone')) : ?>
+                    <?php echo htmlspecialchars($metaMessage['phone'])?>
+                <?php else : ?>
+                    <?php echo htmlspecialchars(LiveHelperChat\Helpers\Anonymizer::maskPhone($metaMessage['phone']))?>
+                <?php endif; ?>
+            <?php endif;?>
         </button>
     <?php endif; ?>
 

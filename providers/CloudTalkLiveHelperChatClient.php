@@ -1,7 +1,7 @@
 <?php
 
 namespace LiveHelperChatExtension\cloudtalkio\providers;
-
+#[\AllowDynamicProperties]
 class CloudTalkLiveHelperChatClient {
 
     public static function makeDirectCall($params) {
