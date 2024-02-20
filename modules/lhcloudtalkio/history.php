@@ -42,6 +42,7 @@ $pages = new lhPaginator();
 $pages->items_total = is_numeric($rowsNumber) ? $rowsNumber : \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::getCount($filterParams['filter']);
 $pages->translationContext = 'chat/activechats';
 $pages->serverURL = erLhcoreClassDesign::baseurl('cloudtalkio/history').$append;
+$pages->setItemsPerPage(60);
 $pages->paginate();
 $tpl->set('pages',$pages);
 

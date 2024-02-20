@@ -145,7 +145,7 @@ if ($filterParams['input_form']->ds == 1)
     $pages = new lhPaginator();
     $pages->serverURL = erLhcoreClassDesign::baseurl('cloudtalkio/elastichistory') . $append;
     $pages->items_total = $total > 9000 ? 9000 : $total;
-    $pages->setItemsPerPage(30);
+    $pages->setItemsPerPage(60);
     $pages->paginate();
 
     if ($pages->items_total > 0) {
