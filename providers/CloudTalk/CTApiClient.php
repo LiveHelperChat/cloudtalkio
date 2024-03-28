@@ -7,7 +7,7 @@ require_once('Requests/Auth/Basic.php');
 
 /**
  * Inicialize as:
- * 
+ *
  * $this->api = new CTApiClient( 'access_key_id', 'access_key_secret' );
  */
 class CTApiClient {
@@ -45,12 +45,12 @@ class CTApiClient {
 
 	private function getRequestParams($params){
 		$request_params = '';
-		
+
 		if (!empty($params)) {
 			$uriParams = http_build_query($params, '', '&');
 			$request_params = '?'.rtrim($uriParams, '=');
 		}
-		
+
 		return $request_params;
 	}
 
@@ -62,7 +62,7 @@ class CTApiClient {
 
 	/**
 	 * @api {get} /calls/index.json
-	 * 
+	 *
 	 * $calls = $this->api->getCallHistory(array(
 			'status' => 'missed',
 			'limit' => 30,
@@ -83,7 +83,7 @@ class CTApiClient {
 
 	/**
      * @api {get} /calls/recording/:id.json
-     * 
+     *
      * $recordingData = $this->api->getRecording(call_id);
      */
 	public function getRecording($id){
@@ -124,7 +124,7 @@ class CTApiClient {
 
 	/**
 	 * @api {get} /agents/index.json
-	 * 
+	 *
 	 * $agents = $this->api->getAgents(array(
 			'id' => '100',
 			'limit' => 30,
@@ -145,7 +145,7 @@ class CTApiClient {
 
 	/**
 	 * @api {put} /agents/add.json
-	 * 
+	 *
 	 * $result = $this->api->addAgent(array(
 			'firstname' => 'John',
 			'lastname' => 'Doe',
@@ -166,7 +166,7 @@ class CTApiClient {
 
 	/**
 	 * @api {post} /agents/edit/:id.json
-	 * 
+	 *
 	 * $result = $this->api->editAgent(agentId, array(
 			'firstname' => 'John',
 			'lastname' => 'Doe',
@@ -188,7 +188,7 @@ class CTApiClient {
 
 	/**
 	 * @api {delete} /agents/delete/:id.json
-	 * 
+	 *
 	 * $result = $this->api->deleteAgent(agentId);
 	 */
 	public function deleteAgent($id){
@@ -209,7 +209,7 @@ class CTApiClient {
 
 	/**
 	 * @api {get} /numbers/index.json
-	 * 
+	 *
 	 * $numbers = $this->api->getNumbers(array(
 			'id' => '100',
 			'country_code' => '421',
@@ -231,7 +231,7 @@ class CTApiClient {
 
 	/**
 	 * @api {post} /numbers/edit/:id.json
-	 * 
+	 *
 	 * $result = $this->api->editNumber(numberId, array(
 			'internal_name' => 'XYZ',
 			'type' => '1',
@@ -253,7 +253,7 @@ class CTApiClient {
 
 	/**
 	 * @api {delete} /numbers/clear/:id.json
-	 * 
+	 *
 	 * $result = $this->api->clearNumber(numberId);
 	 */
 	public function clearNumber($id){
@@ -272,7 +272,7 @@ class CTApiClient {
     /***************** CONTACTS ***************/
     /**
      * @api {get} /contacts/index.json
-     * 
+     *
      * $contacts = $this->api->getContacts(array(
 		    'tag_id' => 1,
 		    'limit' => 30,
@@ -293,7 +293,7 @@ class CTApiClient {
 
     /**
      * @api {get} /contacts/show/:id.json
-     * 
+     *
      * $contacts = $this->api->showContact(contactId);
      */
     public function showContact($id){
@@ -310,7 +310,7 @@ class CTApiClient {
 
     /**
      * @api {delete} /contacts/delete/:id.json
-     * 
+     *
      * $result = $this->api->deleteContact(contactId);
      */
     public function deleteContact($id){
@@ -328,7 +328,7 @@ class CTApiClient {
 
     /**
      * @api {put} /contacts/add.json
-     * 
+     *
      * $contacts = $this->api->addContact(array(
 		    'name' => 'Aittokallio Sami',
 		    'title' => 'Mgr.',
@@ -382,7 +382,7 @@ class CTApiClient {
 
     /**
      * @api {post} /contacts/edit/:id.json
-     * 
+     *
      * $contacts = $this->api->editContact(contactId, array(
 		    'name' => 'Aittokallio Sami',
 		    'title' => 'Mgr.',
@@ -429,13 +429,13 @@ class CTApiClient {
         $response = Requests::post($this->getConstant('API_URL').'/contacts/edit/'.$id.'.json', array(), $data, $this->options);
         $response_data = json_decode($response->body);
         return $response_data;
-    }   
+    }
 
     /************* CONTACT NOTES ************/
 
     /**
      * @api {post} /notes/edit/:id.json
-     * 
+     *
      * $note = $this->api->editNote(noteId, array(
 		    'user_id' => 522,
 		    'contact_id' => 9,
@@ -453,11 +453,11 @@ class CTApiClient {
         $response = Requests::post($this->getConstant('API_URL').'/notes/edit/'.$id.'.json', array(), $data, $this->options);
         $response_data = json_decode($response->body);
         return $response_data;
-    } 
+    }
 
     /**
      * @api {put} /notes/add/:id.json
-     * 
+     *
      * $note = $this->api->addNote(contactId, array(
 		    'user_id' => 522,
 		    'note' => 'Lorem ipsum',
@@ -477,7 +477,7 @@ class CTApiClient {
 
     /**
      * @api {get} /notes/index.json
-     * 
+     *
      * $notes = $this->api->getNotes();
      */
     public function getNotes($params = array()){
@@ -494,7 +494,7 @@ class CTApiClient {
 
     /**
      * @api {delete} /notes/delete/:id.json
-     * 
+     *
      * $result = $this->api->deleteNote(noteId);
      */
     public function deleteNote($id){
@@ -512,7 +512,7 @@ class CTApiClient {
 
 	/**
 	 * @api {get} /contacts/attributes.json
-	 * 
+	 *
 	 * $contactAttributes = $this->api->getContactAttributes();
 	 */
 	public function getContactAttributes(){
@@ -531,7 +531,7 @@ class CTApiClient {
 
     /**
      * @api {get} /countries/index.json
-     * 
+     *
      * $countries = $this->api->getCountries();
      */
     public function getCountries(){
@@ -550,7 +550,7 @@ class CTApiClient {
 
     /**
      * @api {get} /activity/index.json
-     * 
+     *
      * $contacts = $this->api->getActivities(array(
 		    'contact_id' => '123',
 		    'type' => 'task',
@@ -572,7 +572,7 @@ class CTApiClient {
 
 	/**
 	 * @api {post} /activity/edit/:id.json
-	 * 
+	 *
 	 * $note = $this->api->editActivity(activityId, array(
 		    'contact_id' => 9,
 		    'type' => 'other',
@@ -594,7 +594,7 @@ class CTApiClient {
 
 	/**
 	 * @api {put} /activity/add/:id.json
-	 * 
+	 *
 	 * $note = $this->api->addActivity(contactId, array(
 		    'type' => 'other',
 		    'name' => 'Lorem ipsum dolor',
@@ -614,7 +614,7 @@ class CTApiClient {
 
     /**
      * @api {delete} /activity/delete/:id.json
-     * 
+     *
      * $result = $this->api->deleteActivity(activityId);
      */
     public function deleteActivity($id){
@@ -634,7 +634,7 @@ class CTApiClient {
     /***************** BLACKLIST ***************/
     /**
      * @api {get} /blacklist/index.json
-     * 
+     *
      * $blacklist = $this->api->getBlacklists(array(
             'type' => 'all',
             'public_number' => '44123',
@@ -656,7 +656,7 @@ class CTApiClient {
 
     /**
      * @api {delete} /blacklist/delete/:id.json
-     * 
+     *
      * $result = $this->api->deleteFromBlacklist(ID);
      */
     public function deleteFromBlacklist($id){
@@ -674,7 +674,7 @@ class CTApiClient {
 
     /**
      * @api {put} /blacklist/add.json
-     * 
+     *
      * $blacklist = $this->api->addToBlacklist(array(
             'type' => 'all',
             'public_number' => '+442012345678'
@@ -694,7 +694,7 @@ class CTApiClient {
 
     /**
      * @api {post} /blacklist/edit/:id.json
-     * 
+     *
      * $blacklist = $this->api->editBlacklist(ID, array(
             'type' => 'all',
             'public_number' => '+442012345678'
@@ -892,7 +892,7 @@ class CTApiClient {
         }
         Requests::register_autoloader();
 
-        $response = Requests::post($this->getConstant('API_URL').'/bulks/contacts.json', array(), $data, $this->options);
+        $response = Requests::post($this->getConstant('API_URL').'/bulk/contacts.json', array(), $data, $this->options);
         $response_data = json_decode($response->body);
         return $response_data;
     }

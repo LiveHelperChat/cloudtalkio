@@ -18,7 +18,6 @@
  *
  * @package Requests
  */
-#[\AllowDynamicProperties]
 class Requests {
 	/**
 	 * POST method
@@ -519,7 +518,7 @@ class Requests {
 			'idn' => true,
 			'hooks' => null,
 			'transport' => null,
-			'verify' => Requests::get_certificate_path(),
+			'verify' => true,
 			'verifyname' => true,
 		);
 		if ($multirequest !== false) {

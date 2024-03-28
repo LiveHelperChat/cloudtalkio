@@ -324,7 +324,7 @@ class Requests_Transport_cURL implements Requests_Transport {
 				$data = '';
 			}
 			elseif (!is_string($data)) {
-				$data = http_build_query($data, "", '&');
+				$data = http_build_query($data, null, '&');
 			}
 		}
 
