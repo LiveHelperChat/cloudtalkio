@@ -6,8 +6,6 @@ erTranslationClassLhTranslation::$htmlEscape = false;
 $db = ezcDbInstance::get();
 $db->beginTransaction();
 
-include_once 'extension/cloudtalkio/vendor/autoload.php';
-
 try {
 
     $message = erLhcoreClassModelmsg::fetch($Params['user_parameters']['msg_id']);

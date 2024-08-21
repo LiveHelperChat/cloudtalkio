@@ -12,6 +12,10 @@ if (isset($_GET['doSearch'])) {
 
 $append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form']);
 
+if ($filterParams['input_form']->username != '') {
+    $filterParams['filter']['innerjoin']['lh_users'] = array('`lhc_cloudtalkio_agent_native`.`user_id`','`lh_users` . `id`');
+}
+
 $pages = new lhPaginator();
 $pages->items_total = \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoAgentNative::getCount($filterParams['filter']);
 $pages->translationContext = 'chat/activechats';

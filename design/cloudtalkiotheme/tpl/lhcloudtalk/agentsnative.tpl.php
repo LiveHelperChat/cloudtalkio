@@ -1,5 +1,7 @@
 <h1><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('module/cloudtalk','Agents in Live Helper Chat');?></h1>
 
+<?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/agentsnative/search_panel.tpl.php')); ?>
+
 <?php if (isset($items)) : ?>
     <table cellpadding="0" cellspacing="0" class="table table-sm" width="100%" ng-non-bindable>
         <thead>
