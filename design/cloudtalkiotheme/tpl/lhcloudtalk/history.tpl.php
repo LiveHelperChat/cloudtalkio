@@ -21,19 +21,43 @@
             <th><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Chat ID');?></th>
         </tr>
         </thead>
-        <?php foreach ($items as $item) : ?>
+        <?php
+
+        $seeEmail = erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','chat_see_email');
+        $seeUnhidden = erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','chat_see_unhidden_email');
+        $seeRawJson = erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_admin');
+        $seePhone = erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_unhidden_phone');
+
+        foreach ($items as $item) : ?>
             <tr>
                 <td nowrap="" title="<?php echo date(erLhcoreClassModule::$dateDateHourFormat,$item->created_at);?>">
-                    <?php echo htmlspecialchars($item->id) ?><a class="material-icons" onclick="lhc.revealModal({'url':WWW_DIR_JAVASCRIPT+'cloudtalkio/rawjson/<?php echo $item->id?>'})">info_outline</a><span title="<?php if ($item->contact_removed == 1) : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact removed');?><?php else : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact exists in CloudTalk');?><?php endif; ?>" class="ms-1 material-icons <?php if ($item->contact_removed == 1) : ?>text-danger<?php else : ?>text-success<?php endif; ?>">contact_phone</span>
+                    <?php if ($seeRawJson === true) : ?>
+                        <?php echo htmlspecialchars($item->id) ?><a class="material-icons" onclick="lhc.revealModal({'url':WWW_DIR_JAVASCRIPT+'cloudtalkio/rawjson/<?php echo $item->id?>'})">info_outline</a>
+                    <?php endif; ?>
+                    <span title="<?php if ($item->contact_removed == 1) : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact removed');?><?php else : ?><?php echo erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Contact exists in CloudTalk');?><?php endif; ?>" class="ms-1 material-icons <?php if ($item->contact_removed == 1) : ?>text-danger<?php else : ?>text-success<?php endif; ?>">contact_phone</span>
                 </td>
                 <td title="<?php echo htmlspecialchars((string)$item->phone_from)?>">
                     <?php echo htmlspecialchars((string)$item->department)?>
                 </td>
                 <td>
-                    <a class="mx-1" href="tel:+<?php echo htmlspecialchars($item->phone)?>">+<?php echo htmlspecialchars($item->phone)?></a>
-                    <?php if ($item->email != '') : ?>
-                        <br/><a class="mx-1" href="mailto:<?php echo htmlspecialchars($item->email) ?>"><?php echo htmlspecialchars($item->email) ?></a>
+
+                    <?php if ($seePhone) : ?>
+                        <a class="mx-1" href="tel:+<?php echo htmlspecialchars($item->phone)?>">+<?php echo htmlspecialchars($item->phone)?></a>
+                    <?php else : ?>
+                        <?php echo htmlspecialchars(LiveHelperChat\Helpers\Anonymizer::maskPhone($item->phone))?>
                     <?php endif; ?>
+
+                    <?php if ($item->email != '') : ?>
+                        <br/>
+                        <?php if ($seeEmail) : ?>
+                                <?php if ($seeUnhidden) : ?>
+                                    <a class="mx-1" href="mailto:<?php echo htmlspecialchars($item->email) ?>"><?php echo htmlspecialchars($item->email) ?></a>
+                                <?php else : ?>
+                                    <?php echo htmlspecialchars(LiveHelperChat\Helpers\Anonymizer::maskEmail($item->email))?>
+                                <?php endif; ?>
+                        <?php endif;?>
+                    <?php endif; ?>
+
                     <?php if ($item->nick != '') : ?>
                         <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/extensions/visitor_nick.tpl.php')); ?>
                     <?php endif; ?>

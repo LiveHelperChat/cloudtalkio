@@ -1,12 +1,20 @@
 <?php if ($item instanceof LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoESCall) : ?>
 
+    <?php
+        $seePhone = erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_unhidden_phone');
+    ?>
+
     <i class="material-icons">phone</i>
 
     <?php echo htmlspecialchars($item->id)?>
 
     <?php include(erLhcoreClassDesign::designtpl('lhcloudtalk/parts/direction.tpl.php')); ?>
 
-    <a href="tel:+<?php echo htmlspecialchars($item->phone)?>">+<?php echo htmlspecialchars($item->phone)?></a>
+    <?php if ($seePhone) : ?>
+        <a class="mx-1" href="tel:+<?php echo htmlspecialchars($item->phone)?>">+<?php echo htmlspecialchars($item->phone)?></a>
+    <?php else : ?>
+        <?php echo htmlspecialchars(LiveHelperChat\Helpers\Anonymizer::maskPhone($item->phone))?>
+    <?php endif; ?>
 
     <?php if ($item->chat_id > 0) : ?>
         <a onclick="lhc.previewChat(<?php echo $item->chat_id?>)"><i class="material-icons">info_outline</i></a>

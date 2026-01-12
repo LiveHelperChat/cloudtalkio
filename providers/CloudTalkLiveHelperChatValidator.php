@@ -44,7 +44,6 @@ class CloudTalkLiveHelperChatValidator{
 
     public static function callListExport($chats, $params = array())
     {
-
         $chatArray = array(
             array(
                 'ID',
@@ -112,6 +111,24 @@ class CloudTalkLiveHelperChatValidator{
                 $statusText = (($itemObject->status_outcome == \LiveHelperChatExtension\cloudtalkio\providers\erLhcoreClassModelCloudTalkIoCall::STATUS_OUTCOME_ANSWERED) ? \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'answered') : \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin', 'not answered'));
             }
 
+            $seeEmail = \erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','chat_see_email');
+            $seeUnhidden = \erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','chat_see_unhidden_email');
+            $seePhone = \erLhcoreClassUser::instance()->hasAccessTo('lhcloudtalkio','use_unhidden_phone');
+
+            $email = '';
+            if ($seeEmail) {
+                if ($seeUnhidden === true) {
+                    $email = $itemObject->email;
+                } else {
+                    $email = \LiveHelperChat\Helpers\Anonymizer::maskEmail($itemObject->email);
+                }
+            }
+
+            $phone = $itemObject->phone;
+            if (!$seePhone) {
+                $phone = \LiveHelperChat\Helpers\Anonymizer::maskPhone($itemObject->phone);
+            }
+
             $itemData = [
                 $itemObject->id,
                 date('Y-m-d H:i:s',$itemObject->created_at),
@@ -119,9 +136,9 @@ class CloudTalkLiveHelperChatValidator{
                 ($itemObject->answered_at > 0 ? date('Y-m-d H:i:s',$itemObject->answered_at) : ''),
                 (string)$itemObject->department,
                 (string)$itemObject->phone_from,
-                $itemObject->phone,
+                $phone,
                 $itemObject->nick,
-                $itemObject->email,
+                $email,
                 (string)$itemObject->user,
                 $itemObject->user_id,
                 (string)$itemObject->cloudtalk_user,

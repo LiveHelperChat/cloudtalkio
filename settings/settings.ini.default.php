@@ -7,6 +7,8 @@ return array(
     // true - we will automatically change operator exclude from auto assign attribute.
     // false - we will not control operator exclude from auto assign attribute.
     'control_auto_assign' => true,
+    'expose_phone_url' => false,
+    'expose_email_url' => false,
 );
 
 ?>

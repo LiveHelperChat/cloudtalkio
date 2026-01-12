@@ -104,9 +104,9 @@ if (isset($filterParams['filter']['filterlte']['created_at'])) {
 erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalkio.elasticsearchexecute',array('sparams' => & $sparams, 'filter' => $filterParams));
 
 if ($filterParams['input_form']->sortby == 'idasc') {
-    $sort = array('_id' => array('order' => 'asc'));
+    $sort = array('created_at' => array('order' => 'asc'));
 } else {
-    $sort = array('_id' => array('order' => 'desc'));
+    $sort = array('created_at' => array('order' => 'desc'));
 }
 
 $append = erLhcoreClassSearchHandler::getURLAppendFromInput($filterParams['input_form'], false, ['form_action']);

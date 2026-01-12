@@ -5,7 +5,6 @@ namespace LiveHelperChatExtension\cloudtalkio\providers;
 class CloudTalkLiveHelperChatClient {
 
     public static function makeDirectCall($params) {
-
         if (class_exists('\erLhcoreClassExtensionLhcphpresque')) {
             $inst_id = class_exists('\erLhcoreClassInstance') ? \erLhcoreClassInstance::$instanceChat->id : 0;
             \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionLhcphpresque')->enqueue('lhc_cloudtalk', '\LiveHelperChatExtension\cloudtalkio\providers\CloudTalkLiveHelperChatClient', array(
@@ -43,7 +42,7 @@ class CloudTalkLiveHelperChatClient {
             'call_uuid' => $data['call_uuid'],
             'icon_url' => \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::design('images/general/logo_user.png'),
             'title' =>  ($call->nick != '' ? $call->nick : 'Visitor') . ($call->chat_id > 0 ? ' | Chat ID - ' . $call->chat_id : ''),
-            'subtitle' => (string)$call->department . ($call->email != '' ? ' | ' . $call->email : ''),
+            'subtitle' => (string)$call->department /*. ($call->email != '' ? ' | ' . $call->email : '')*/,
             "type" => "html",
             "content" => '',
         ];
@@ -51,13 +50,13 @@ class CloudTalkLiveHelperChatClient {
         $elements = ['<ul>'];
 
         if (class_exists('\erLhcoreClassExtensionElasticsearch')) {
-            if ($call->email != '') {
+            if ($call->email != '' && \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['expose_email_url'] === true) {
                 $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/email/(val)/' . rawurlencode($call->email).'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions') . '</a></li>';
             } else {
                 $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/elasticsearch/interactions') . '/(attr)/phone/(val)/' . rawurlencode($call->phone).'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions') . '</a></li>';
             }
         } else {
-            if ($call->email != '') {
+            if ($call->email != '' && \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['expose_email_url'] === true) {
                 $elements[] =  '<li><a target="_blank" href="' . \erLhcoreClassBBCode::getHost() . \erLhcoreClassDesign::baseurldirect('site_admin/chat/list') . '/(email)/' . rawurlencode($call->email).'">' . \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Visitor chats') . '</a></li>';
             }
         }
@@ -165,8 +164,20 @@ class CloudTalkLiveHelperChatClient {
 
         if (isset($params['params_dispatch']['arg_2']) && !empty($params['params_dispatch']['arg_2']) != '' && is_object($agent)) {
 
+            $arg2 = $params['params_dispatch']['arg_2'];
+
+            if (strpos($arg2, '+') === 0) {
+                $phone = $arg2;
+            } else {
+                $phone = \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->decryptPhone($arg2);
+                if ($phone === null || $phone === false || $phone === '') {
+                    // fallback to raw value if decrypt failed
+                    $phone = $arg2;
+                }
+            }
+
             $args = ['content' => ['extension' => true, 'cloudtalk' => [
-                'phone' =>  $params['params_dispatch']['arg_2'],
+                'phone' => $phone,
                 'status' => 'invite']]];
 
             if (isset($params['params_dispatch']['arg_3']) && $params['params_dispatch']['arg_3'] == 'updatephone') {
@@ -331,7 +342,7 @@ class CloudTalkLiveHelperChatClient {
             );
         }
 
-        if (class_exists('\erLhcoreClassExtensionElasticsearch')) {
+        if (class_exists('\erLhcoreClassExtensionElasticsearch') && \erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['expose_phone_url'] === true){
             if ($chat->email != '') {
                 $externalURL[] = array(
                     'name' => \erTranslationClassLhTranslation::getInstance()->getTranslation('cloudtalkio/admin','Interactions'),
@@ -355,15 +366,21 @@ class CloudTalkLiveHelperChatClient {
                     )
                 ),
                 'title' => $chat->department . ' | ' . $chat->nick . ' | ' . $chat->id,
-                'ContactEmail' => array(
-                    array(
-                        'email' => $chat->email,
-                    )
-                ),
-                'ExternalUrl' => $externalURL,
                 'company' => (string)$chat->department,
                 'website' => (string)$chat->referrer,
             );
+
+            if (\erLhcoreClassModule::getExtensionInstance('erLhcoreClassExtensionCloudtalkio')->settings['expose_email_url'] === true) {
+                $newContactData['ContactEmail'] = array(
+                    array(
+                        'email' => $chat->email,
+                    )
+                );
+            }
+
+            if (!empty($externalURL)) {
+                $newContactData['ExternalUrl'] = $externalURL;
+            }
 
             \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.new_contact',array('contact' => & $newContactData, 'chat' => & $chat));
 
@@ -380,9 +397,12 @@ class CloudTalkLiveHelperChatClient {
             if ($contactId !== null || is_object($response)) {
 
                 $editContactData = array(
-                    'name' => $chat->nick,
-                    'ExternalUrl' => $externalURL,
+                    'name' => $chat->nick
                 );
+
+                if (!empty($externalURL)) {
+                    $editContactData['ExternalUrl'] = $externalURL;
+                }
 
                 \erLhcoreClassChatEventDispatcher::getInstance()->dispatch('cloudtalk.edit_contact',array('contact' => & $editContactData, 'chat' => & $chat));
 

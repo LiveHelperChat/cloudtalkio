@@ -39,7 +39,7 @@ $ViewList['elastichistory'] = array(
         'phone_from_ids'
     ),
     'functions' => array(
-        'use_operator'
+        'use_list'
     ),
     'multiple_arguments' => array(
         'department_ids',
@@ -75,7 +75,7 @@ $ViewList['history'] = array(
         'phone_from_ids'
     ),
     'functions' => array(
-        'use_operator'
+        'use_list'
     ),
     'multiple_arguments' => array(
         'department_ids',
@@ -98,7 +98,7 @@ $ViewList['assignaction'] = array(
 
 $ViewList['rawjson'] = array(
     'params' => array('id'),
-    'functions' => array('use_operator'),
+    'functions' => array('use_admin'),
 );
 
 $ViewList['phonenumbers'] = array(
@@ -166,3 +166,6 @@ $FunctionList['use_direct'] = array('explain' => 'Allow operator to use CloudTal
 $FunctionList['use_phone'] = array('explain' => 'Allow operator to use CloudTalk (phone number)');
 $FunctionList['use_unhidden_phone'] = array('explain' => 'Allow operator to see full phone number');
 $FunctionList['edit_visitor_phone'] = array('explain' => 'Allow operator to edit visitor phone');
+$FunctionList['chat_see_email'] = array('explain' => 'Allow operator to see e-mail of the visitor');
+$FunctionList['chat_see_unhidden_email'] = array('explain' => 'Allow operator to see full e-mail address of the visitor');
+$FunctionList['use_list'] = array('explain' => 'Allow operator to see call list');

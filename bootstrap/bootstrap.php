@@ -50,6 +50,43 @@ class erLhcoreClassExtensionCloudtalkio {
         
     }
 
+    public function encryptPhone($phone) {
+        $secretKey = erConfigClassLhConfig::getInstance()->getSetting( 'site', 'secrethash' );
+        
+        $cipher = "aes-256-cbc";
+        $ivLength = openssl_cipher_iv_length($cipher);
+        $iv = openssl_random_pseudo_bytes($ivLength);
+        
+        // Hash the secret key to get a proper 32-byte key for AES-256
+        $key = hash('sha256', $secretKey, true);
+        
+        // Encrypt the phone number
+        $encrypted = openssl_encrypt($phone, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+        
+        // Combine IV and encrypted data, then base64 encode for storage
+        return base64_encode($iv . $encrypted);
+    }
+
+    public function decryptPhone($phone) {
+        $secretKey = erConfigClassLhConfig::getInstance()->getSetting( 'site', 'secrethash' );
+        
+        $cipher = "aes-256-cbc";
+        $ivLength = openssl_cipher_iv_length($cipher);
+        
+        // Hash the secret key to get a proper 32-byte key for AES-256
+        $key = hash('sha256', $secretKey, true);
+        
+        // Decode the base64 encoded data
+        $data = base64_decode($phone);
+        
+        // Extract IV and encrypted data
+        $iv = substr($data, 0, $ivLength);
+        $encrypted = substr($data, $ivLength);
+        
+        // Decrypt the phone number
+        return openssl_decrypt($encrypted, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    }
+
     public static function getSession() {
         if (! isset ( self::$persistentSession )) {
             self::$persistentSession = new ezcPersistentSession ( ezcDbInstance::get (), new ezcPersistentCodeManager ( './extension/cloudtalkio/pos' ) );
